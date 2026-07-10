@@ -36,10 +36,10 @@
 
   .sun {
     position: absolute;
-    top: 6%;
-    right: 10%;
-    width: 11rem;
-    height: 11rem;
+    top: 4%;
+    right: 6%;
+    width: 16rem;
+    height: 16rem;
     border-radius: 50%;
     background: radial-gradient(circle at 38% 32%, #FFE8A3, var(--sunshine) 60%, var(--sunshine-dark) 100%);
     box-shadow: 0 0 6rem rgba(255, 209, 102, 0.55);
@@ -149,6 +149,7 @@
   /* Island positions & sizes */
   #island-animals   { top: 42%; left: 12%; }
   #island-numbers   { top: 26%; left: 34%; }
+  #island-numbersv2   { top: 27%; left: 44%; }
   #island-letters   { top: 46%; left: 56%; }
   #island-colors    { top: 22%; left: 76%; }
   #island-reading   { top: 58%; left: 78%; }
@@ -272,8 +273,31 @@
   .principle h3 { font-size: 2.1rem; margin-bottom: 1rem; }
   .principle p { font-size: 1.5rem; color: var(--plum-soft); line-height: 1.6; font-weight: 500; }
 
-  @media (max-width: 760px) {
+@media (max-width: 760px) {
+    .sun { width: 7rem; height: 7rem; top: 4%; right: 6%; }
+    .cloud--1 { width: 8rem; }
+    .cloud--2 { width: 6rem; }
+    .cloud--3 { width: 5rem; }
+
+    .brand { top: 1.6rem; }
     .brand .display { font-size: 2.6rem; }
+    .brand p { font-size: 1.3rem; }
+
+    .back-btn, .sound-toggle {
+      width: 5rem; height: 5rem;
+      font-size: 2.2rem;
+      top: 1.2rem;
+    }
+    .sound-toggle { right: 1.2rem; }
+    #settingsToggle { top: 7rem !important; right: 1.2rem; }
+
+    #voicePanel {
+      width: 88vw !important;
+      right: 6vw !important;
+      left: 6vw !important;
+      top: 13rem !important;
+    }
+
     .island-blob { width: 10.5rem !important; height: 10.5rem !important; }
     #island-animals { left: 4%; top: 38%; }
     #island-numbers { left: 30%; top: 20%; }
@@ -281,14 +305,66 @@
     #island-colors  { left: 74%; top: 16%; }
     #island-reading { left: 70%; top: 60%; }
     .island-label { font-size: 1.3rem; padding: 0.5rem 1.2rem; }
+
+    /* Decorative floaters: scale down, drop a couple to avoid clutter */
+    #decorRainbow { font-size: 4rem !important; top: 6% !important; left: 8% !important; }
+    #decorButterfly1 { font-size: 2.6rem !important; }
+    #decorButterfly2 { display: none; }
+    #decorSparkle1, #decorSparkle2 { font-size: 1.8rem !important; }
+    #decorBalloon { font-size: 3rem !important; left: 4% !important; }
+
+    .mascot-dock { bottom: 4%; }
+    .mascot-dock canvas { width: 11rem; height: 11rem; }
+    .speech-bubble { font-size: 1.3rem; padding: 0.7rem 1.4rem; }
+
+    .scroll-hint { font-size: 1.1rem; }
+
+    .parents { padding: 6rem 6vw 8rem; }
     .parents h2 { font-size: 2.8rem; }
-    .principle-row { grid-template-columns: 1fr; margin-top: 5rem; }
+    .parents .lead { font-size: 1.6rem; margin-top: 1.4rem; }
+    .principle-row { grid-template-columns: 1fr; margin-top: 5rem; gap: 2rem; }
+  }
+
+  /* ---------- Very small phones ---------- */
+  @media (max-width: 380px) {
+    .brand .display { font-size: 2.1rem; }
+    .island-blob { width: 8.6rem !important; height: 8.6rem !important; }
+    .island-label { font-size: 1.15rem; }
+    .mascot-dock canvas { width: 9rem; height: 9rem; }
+  }
+
+  /* ---------- Short / landscape screens ---------- */
+  @media (max-height: 480px) {
+    .hero { min-height: 100vh; }
+    .brand { top: 1rem; }
+    .brand .display { font-size: 2rem; }
+    .brand p { display: none; }
+    .mascot-dock { bottom: 2%; }
+    .mascot-dock canvas { width: 8rem; height: 8rem; }
+    .scroll-hint { display: none; }
+    .sea { height: 26%; }
   }
 </style>
 </head>
 <body>
 
 <button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+<button class="sound-toggle" id="settingsToggle" style="top:9.4rem;" aria-label="Cài đặt giọng đọc">⚙️</button>
+
+<div id="voicePanel" style="display:none; position:fixed; top:16rem; right:2rem; z-index:100; background:white; border-radius:2rem; padding:2rem; box-shadow:0 0.6rem 1.6rem rgba(74,59,82,0.18); width:28rem; font-family:var(--font-body);">
+  <div style="font-family:var(--font-display); font-weight:700; font-size:1.6rem; margin-bottom:1.2rem; color:var(--plum);">Giọng đọc</div>
+
+  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Chọn giọng</label>
+  <select id="voiceSelect" style="width:100%; margin:0.6rem 0 1.6rem; padding:0.8rem; border-radius:1rem; border:0.1rem solid #eee; font-size:1.4rem;"></select>
+
+  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Tốc độ nói</label>
+  <input type="range" id="rateSlider" min="0.5" max="1.3" step="0.05" style="width:100%; margin:0.6rem 0 1.6rem;">
+
+  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Cao độ giọng</label>
+  <input type="range" id="pitchSlider" min="0.7" max="1.6" step="0.05" style="width:100%; margin:0.6rem 0 1rem;">
+
+  <button id="testVoiceBtn" style="width:100%; padding:1rem; border-radius:1.2rem; background:var(--sky-deep); color:white; font-weight:700; font-size:1.4rem;">🔊 Nghe thử: "Xin chào bé!"</button>
+</div>
 
 <section class="hero" id="hero">
   <div class="sun"></div>
@@ -333,9 +409,17 @@
     <div class="island" id="island-numbers" data-topic="numbers" data-label="Đảo Số Đếm">
       <div class="island-blob">
         <svg viewBox="0 0 100 100"><path fill="var(--sky-deep)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:4.2rem;">5️⃣</span>
+        <span class="island-glyph" style="font-size:4.2rem;">1</span>
       </div>
       <div class="island-label">Số Đếm</div>
+    </div>
+    
+    <div class="island" id="island-numbersv2" data-topic="numbersv2" data-label="Đảo Số Đếm">
+      <div class="island-blob">
+        <svg viewBox="0 0 100 100"><path fill="#42C171" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
+        <span class="island-glyph" style="font-size:4.2rem;">2</span>
+      </div>
+      <div class="island-label">Số Đếm 2</div>
     </div>
 
     <div class="island" id="island-letters" data-topic="letters" data-label="Đảo Chữ Cái">
@@ -432,7 +516,38 @@
     SoundManager.setMuted(nowMuted);
     soundToggle.textContent = nowMuted ? '🔇' : '🔊';
   });
+  /* ---------- Voice settings panel ---------- */
+  const settingsToggle = document.getElementById('settingsToggle');
+  const voicePanel = document.getElementById('voicePanel');
+  const voiceSelect = document.getElementById('voiceSelect');
+  const rateSlider = document.getElementById('rateSlider');
+  const pitchSlider = document.getElementById('pitchSlider');
+  const testVoiceBtn = document.getElementById('testVoiceBtn');
 
+  settingsToggle.addEventListener('click', () => {
+    voicePanel.style.display = voicePanel.style.display === 'none' ? 'block' : 'none';
+  });
+
+  function populateVoiceList() {
+    const list = SoundManager.getVoices();
+    if (!list.length) return; // voices load async in some browsers, retry via onvoiceschanged
+    const s = SoundManager.getSettings();
+    voiceSelect.innerHTML = list.map(v =>
+      `<option value="${v.voiceURI}">${v.name} (${v.lang})</option>`
+    ).join('');
+    if (s.voiceURI) voiceSelect.value = s.voiceURI;
+    rateSlider.value = s.rate;
+    pitchSlider.value = s.pitch;
+  }
+  populateVoiceList();
+  if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
+
+  voiceSelect.addEventListener('change', () => SoundManager.setVoice(voiceSelect.value));
+  rateSlider.addEventListener('input', () => SoundManager.setRate(parseFloat(rateSlider.value)));
+  pitchSlider.addEventListener('input', () => SoundManager.setPitch(parseFloat(pitchSlider.value)));
+  testVoiceBtn.addEventListener('click', () => SoundManager.speak('Xin chào bé!'));
   /* ---------- Mascot ---------- */
   const mascotCanvas = document.getElementById('mascotCanvas');
   const mascot = createMascot(mascotCanvas, { size: 260 });
@@ -494,7 +609,7 @@
       });
 
       const topic = island.dataset.topic;
-      const ready = { animals: 'animal-island.html', numbers: 'numbers-island.html' };
+      const ready = { animals: 'animal-island.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
       if (ready[topic]) {
         gsap.to('.hero', {
           opacity: 0, scale: 1.06, duration: 0.6, delay: 0.5, ease: 'power2.in',
