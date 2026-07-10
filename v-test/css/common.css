@@ -1,0 +1,125 @@
+/* ============================================
+   BÉ VUI HỌC — Design tokens & shared styles
+   ============================================ */
+
+:root {
+  /* Palette — warm archipelago at golden hour */
+  --cream: #FFF6E9;
+  --cream-deep: #FFEDD3;
+  --coral: #FF8A65;
+  --coral-dark: #F2653A;
+  --sky: #6EC6E8;
+  --sky-deep: #3FA7CE;
+  --sunshine: #FFD166;
+  --sunshine-dark: #F2AE2E;
+  --leaf: #8BC34A;
+  --leaf-dark: #6B9E33;
+  --plum: #4A3B52;
+  --plum-soft: #7A6B82;
+  --white: #FFFFFF;
+
+  /* Type scale */
+  --font-display: 'Baloo 2', 'Quicksand', sans-serif;
+  --font-body: 'Nunito', 'Quicksand', sans-serif;
+
+  /* rem baseline: 1rem = 10px */
+  --r: 1rem;
+}
+
+html { font-size: 62.5%; } /* 1rem = 10px */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--plum);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--plum);
+}
+
+button {
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--sunshine); }
+
+/* Accessibility: visible focus rings everywhere */
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 0.4rem solid var(--sky-deep);
+  outline-offset: 0.4rem;
+  border-radius: 1.2rem;
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============ Shared UI ============ */
+
+.sound-toggle {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 0.6rem 1.6rem rgba(74, 59, 82, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  z-index: 100;
+  transition: transform 0.2s ease;
+}
+.sound-toggle:active { transform: scale(0.9); }
+
+.back-btn {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 0.6rem 1.6rem rgba(74, 59, 82, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  z-index: 100;
+  color: var(--coral-dark);
+  transition: transform 0.2s ease;
+}
+.back-btn:active { transform: scale(0.9) rotate(-10deg); }
+
+/* Star reward burst container */
+.fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+}

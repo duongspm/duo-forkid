@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đảo Số Đếm — Bé Vui Học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<style>
+  body {
+    background: linear-gradient(180deg, #DCEFFB 0%, var(--cream) 55%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  img.emoji {
+    height: 1em; width: 1em;
+    vertical-align: -0.15em;
+    display: inline-block;
+    filter: drop-shadow(0 0.3rem 0.3rem rgba(74,59,82,0.18));
+  }
+
+  .progress-dots {
+    position: absolute;
+    top: 2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 20;
+  }
+  .dot {
+    width: 1.4rem; height: 1.4rem;
+    border-radius: 50%;
+    background: rgba(74,59,82,0.15);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .dot.done { background: var(--leaf); transform: scale(1.15); }
+  .dot.active { background: var(--sky-deep); transform: scale(1.3); }
+
+  .count-badge {
+    position: fixed;
+    top: 9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    min-width: 9rem;
+    text-align: center;
+    padding: 1.2rem 2.4rem;
+    border-radius: 3rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 4rem;
+    color: var(--sky-deep);
+    box-shadow: 0 0.8rem 2rem rgba(74,59,82,0.14);
+    z-index: 20;
+  }
+
+  .prompt {
+    position: fixed;
+    top: 20.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--plum-soft);
+    z-index: 20;
+    text-align: center;
+    width: 90vw;
+  }
+
+  .stage {
+    flex: 1;
+    position: relative;
+    margin-top: 15rem;
+    padding-bottom: 4rem;
+  }
+
+  .fruit-btn {
+    position: absolute;
+    width: 9rem; height: 9rem;
+    font-size: 5.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(1) opacity(0.45);
+    transition: filter 0.25s ease;
+  }
+  .fruit-btn.counted { filter: none; }
+  .fruit-btn:active { transform: scale(0.85); }
+
+  .complete-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(74,59,82,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+  }
+  .complete-overlay.show { display: flex; }
+  .complete-card {
+    background: white;
+    border-radius: 3rem;
+    padding: 4rem 3.6rem;
+    text-align: center;
+    max-width: 44rem;
+  }
+  .complete-card .display { font-size: 3rem; color: var(--sky-deep); margin-bottom: 1rem; }
+  .complete-card p { font-size: 1.7rem; color: var(--plum-soft); font-weight: 600; margin-bottom: 2.6rem; }
+  .complete-card button {
+    background: var(--leaf);
+    color: white;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.8rem;
+    padding: 1.4rem 3.2rem;
+    border-radius: 4rem;
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
+<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+
+<div class="progress-dots" id="progressDots"></div>
+<div class="count-badge" id="countBadge">0</div>
+<div class="prompt" id="prompt">Chạm vào từng quả để đếm nhé!</div>
+
+<div class="stage" id="stage"></div>
+
+<div class="complete-overlay" id="completeOverlay">
+  <div class="complete-card">
+    <div class="display">🎉 Bé đếm giỏi quá!</div>
+    <p>Bé đã đếm hết các quả trên đảo số rồi đó!</p>
+    <button id="backToMapBtn">Về bản đồ</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="js/reward-fx.js"></script>
+<script src="js/sound-manager.js"></script>
+<script>
+  // Each round: how many items, which fruit, and fixed scatter layout (in % of stage)
+  const ROUNDS = [
+    { total: 3,  fruit: '🍎', positions: [[20,15],[55,40],[75,10]] },
+    { total: 5,  fruit: '🍌', positions: [[10,45],[30,10],[50,55],[68,20],[85,48]] },
+    { total: 7,  fruit: '🍓', positions: [[8,20],[24,50],[40,8],[55,42],[70,15],[85,55],[46,65]] },
+    { total: 10, fruit: '🍉', positions: [[6,35],[18,10],[30,55],[42,20],[54,45],[66,8],[78,38],[90,60],[12,65],[62,62]] },
+  ];
+
+  const stage = document.getElementById('stage');
+  const countBadge = document.getElementById('countBadge');
+  const prompt = document.getElementById('prompt');
+  const progressDots = document.getElementById('progressDots');
+  const soundToggle = document.getElementById('soundToggle');
+
+  let roundIndex = 0;
+  let count = 0;
+
+  soundToggle.addEventListener('click', () => {
+    const nowMuted = !SoundManager.isMuted();
+    SoundManager.setMuted(nowMuted);
+    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
+  });
+
+  ROUNDS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.dataset.i = i;
+    progressDots.appendChild(d);
+  });
+
+  function updateDots() {
+    progressDots.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('done', i < roundIndex);
+      d.classList.toggle('active', i === roundIndex);
+    });
+  }
+
+  function loadRound(i) {
+    count = 0;
+    countBadge.textContent = '0';
+    stage.innerHTML = '';
+    const round = ROUNDS[i];
+    prompt.textContent = `Có mấy quả ${round.fruit === '🍎' ? 'táo' : round.fruit === '🍌' ? 'chuối' : round.fruit === '🍓' ? 'dâu' : 'dưa hấu'} trên đảo nhỉ?`;
+
+    round.positions.forEach((pos, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'fruit-btn';
+      btn.textContent = round.fruit;
+      btn.style.left = pos[0] + '%';
+      btn.style.top = pos[1] + '%';
+      btn.dataset.idx = idx;
+      btn.addEventListener('click', () => tapFruit(btn));
+      stage.appendChild(btn);
+      gsap.from(btn, { scale: 0, opacity: 0, duration: 0.5, delay: idx * 0.06, ease: 'back.out(2)' });
+    });
+
+    twemoji.parse(stage, { folder: 'svg', ext: '.svg' });
+    updateDots();
+  }
+
+  function tapFruit(btn) {
+    if (btn.classList.contains('counted')) return;
+    btn.classList.add('counted');
+    count++;
+    countBadge.textContent = String(count);
+    gsap.fromTo(countBadge, { scale: 1.3 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+    gsap.fromTo(btn, { scale: 1.3 }, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
+
+    const rect = btn.getBoundingClientRect();
+    celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    SoundManager.speak(String(count));
+
+    const round = ROUNDS[roundIndex];
+    if (count === round.total) {
+      setTimeout(() => {
+        SoundManager.speak(`Bé đếm được ${round.total} quả!`);
+        if (roundIndex === ROUNDS.length - 1) {
+          celebrateBig();
+          document.getElementById('completeOverlay').classList.add('show');
+        } else {
+          roundIndex++;
+          loadRound(roundIndex);
+        }
+      }, 700);
+    }
+  }
+
+  document.getElementById('backToMapBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+
+  loadRound(0);
+</script>
+</body>
+</html>

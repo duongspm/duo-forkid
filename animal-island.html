@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đảo Con Vật — Bé Vui Học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/common.css">
+<style>
+  body {
+    background: linear-gradient(180deg, #DFF3E4 0%, var(--cream) 55%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Twemoji: crisp colorful vector emoji, consistent across every device */
+  img.emoji {
+    height: 1em; width: 1em;
+    vertical-align: -0.15em;
+    display: inline-block;
+    filter: drop-shadow(0 0.3rem 0.3rem rgba(74,59,82,0.18));
+  }
+  .critter-btn img.emoji { height: 0.9em; width: 0.9em; }
+
+  .stage-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+  }
+
+  .progress-dots {
+    position: absolute;
+    top: 2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 20;
+  }
+  .dot {
+    width: 1.4rem; height: 1.4rem;
+    border-radius: 50%;
+    background: rgba(74,59,82,0.15);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .dot.done { background: var(--leaf); transform: scale(1.15); }
+  .dot.active { background: var(--coral); transform: scale(1.3); }
+
+  .stage {
+    position: relative;
+    width: 34rem;
+    height: 34rem;
+    max-width: 80vw;
+    max-height: 80vw;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #ffffff 0%, #FFF6E9 70%, #FCE9C9 100%);
+    box-shadow: 0 2rem 5rem rgba(74,59,82,0.12), inset 0 -1rem 2.4rem rgba(255,209,102,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .stage canvas { width: 90%; height: 90%; }
+
+  .animal-name-badge {
+    margin-top: 2.4rem;
+    background: white;
+    padding: 1rem 3.2rem;
+    border-radius: 4rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2.6rem;
+    color: var(--plum);
+    box-shadow: 0 0.8rem 2rem rgba(74,59,82,0.12);
+    transition: transform 0.15s ease;
+  }
+
+  .sound-word {
+    margin-top: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--coral-dark);
+    height: 2.4rem;
+  }
+
+  .tap-hint {
+    margin-top: 1.6rem;
+    font-size: 1.4rem;
+    color: var(--plum-soft);
+    font-weight: 700;
+  }
+
+  .dock {
+    padding: 2rem 2rem 3.6rem;
+    display: flex;
+    justify-content: center;
+  }
+  .dock-inner {
+    display: flex;
+    gap: 1.6rem;
+    background: white;
+    padding: 1.4rem;
+    border-radius: 3.2rem;
+    box-shadow: 0 1rem 2.4rem rgba(74,59,82,0.1);
+    max-width: 92vw;
+    overflow-x: auto;
+  }
+  .critter-btn {
+    width: 7rem; height: 7rem;
+    border-radius: 2rem;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, background 0.2s ease;
+    position: relative;
+  }
+  .critter-btn.active { background: var(--coral); box-shadow: 0 0.6rem 1.4rem rgba(242,101,58,0.35); }
+  .critter-btn:active { transform: scale(0.88); }
+  .critter-btn .check {
+    position: absolute;
+    top: -0.4rem; right: -0.4rem;
+    width: 2.2rem; height: 2.2rem;
+    background: var(--leaf);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.3rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 0.25rem solid white;
+  }
+  .critter-btn.completed .check { display: flex; }
+
+  .complete-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(74,59,82,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+  }
+  .complete-overlay.show { display: flex; }
+  .complete-card {
+    background: white;
+    border-radius: 3rem;
+    padding: 4rem 3.6rem;
+    text-align: center;
+    max-width: 44rem;
+  }
+  .complete-card .display { font-size: 3rem; color: var(--coral-dark); margin-bottom: 1rem; }
+  .complete-card p { font-size: 1.7rem; color: var(--plum-soft); font-weight: 600; margin-bottom: 2.6rem; }
+  .complete-card button {
+    background: var(--leaf);
+    color: white;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.8rem;
+    padding: 1.4rem 3.2rem;
+    border-radius: 4rem;
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
+<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+
+<div class="progress-dots" id="progressDots"></div>
+
+<div class="stage-wrap">
+  <div class="stage" id="stage">
+    <canvas id="critterCanvas"></canvas>
+  </div>
+  <div class="animal-name-badge" id="nameBadge">Chạm để xem!</div>
+  <div class="sound-word" id="soundWord"></div>
+  <div class="tap-hint">👆 Chạm vào con vật để xem to hơn</div>
+</div>
+
+<div class="dock">
+  <div class="dock-inner" id="dockInner"></div>
+</div>
+
+<div class="complete-overlay" id="completeOverlay">
+  <div class="complete-card">
+    <div class="display">🎉 Bé giỏi quá!</div>
+    <p>Bé đã khám phá hết cả đảo con vật rồi đó!</p>
+    <button id="backToMapBtn">Về bản đồ</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="assets/js/critters.js"></script>
+<script src="assets/js/reward-fx.js"></script>
+<script src="assets/js/sound-manager.js"></script>
+<script>
+  twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+
+  const soundToggle = document.getElementById('soundToggle');
+  soundToggle.addEventListener('click', () => {
+    const nowMuted = !SoundManager.isMuted();
+    SoundManager.setMuted(nowMuted);
+    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
+  });
+
+  const viewer = createCritterViewer(document.getElementById('critterCanvas'), 340);
+  const nameBadge = document.getElementById('nameBadge');
+  const soundWord = document.getElementById('soundWord');
+  const stage = document.getElementById('stage');
+  const dockInner = document.getElementById('dockInner');
+  const progressDots = document.getElementById('progressDots');
+
+  const seen = new Set();
+  let currentSpec = null;
+
+  // Build progress dots
+  ANIMALS.forEach((a) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.dataset.id = a.id;
+    progressDots.appendChild(d);
+  });
+
+  // Build dock buttons
+  const emojiFor = { cat: '🐱', cow: '🐮', elephant: '🐘', duck: '🦆', fish: '🐟', lion: '🦁' };
+  ANIMALS.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'critter-btn';
+    btn.dataset.id = a.id;
+    btn.innerHTML = `${emojiFor[a.id]}<span class="check">✓</span>`;
+    btn.setAttribute('aria-label', a.name);
+    btn.addEventListener('click', () => selectAnimal(a.id, btn));
+    dockInner.appendChild(btn);
+    if (i === 0) selectAnimal(a.id, btn);
+  });
+  twemoji.parse(dockInner, { folder: 'svg', ext: '.svg' });
+
+  function updateDots() {
+    progressDots.querySelectorAll('.dot').forEach(d => {
+      d.classList.toggle('done', seen.has(d.dataset.id));
+      d.classList.toggle('active', currentSpec && d.dataset.id === currentSpec.id);
+    });
+  }
+
+  function selectAnimal(id, btn) {
+    dockInner.querySelectorAll('.critter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    currentSpec = viewer.show(id);
+    nameBadge.textContent = currentSpec.name;
+    soundWord.textContent = '';
+    gsap.fromTo(nameBadge, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: 'back.out(2)' });
+    updateDots();
+  }
+
+  function markSeen(id, btn) {
+    if (seen.has(id)) return;
+    seen.add(id);
+    btn.classList.add('completed');
+    updateDots();
+    if (seen.size === ANIMALS.length) {
+      setTimeout(() => {
+        celebrateBig();
+        document.getElementById('completeOverlay').classList.add('show');
+      }, 500);
+    }
+  }
+
+  stage.addEventListener('click', () => {
+    if (!currentSpec) return;
+    viewer.bounce();
+    const rect = stage.getBoundingClientRect();
+    celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    soundWord.textContent = currentSpec.sound;
+    gsap.fromTo(soundWord, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: 'back.out(2)' });
+    SoundManager.speak(currentSpec.name + '. ' + currentSpec.sound);
+
+    const activeBtn = dockInner.querySelector(`.critter-btn[data-id="${currentSpec.id}"]`);
+    markSeen(currentSpec.id, activeBtn);
+  });
+
+  document.getElementById('backToMapBtn').addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>
