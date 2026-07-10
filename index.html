@@ -1,627 +1,963 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Bé Vui Học — Đảo Khám Phá</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/common.css">
-<style>
-  body { background: linear-gradient(180deg, #BEE7F5 0%, #E6F6FB 38%, var(--cream) 62%); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bé Vui Học — Đảo Khám Phá</title>
+  <meta name="description"
+    content="Website miễn phí giúp bé dưới 3 tuổi học đếm số, bảng chữ cái, màu sắc, hình dạng và phát triển tư duy qua hình ảnh sinh động, âm thanh và trò chơi đơn giản." />
 
-  /* Twemoji: crisp colorful vector emoji, consistent across every device */
-  img.emoji {
-    height: 1em; width: 1em;
-    vertical-align: -0.15em;
-    display: inline-block;
-    filter: drop-shadow(0 0.3rem 0.3rem rgba(74,59,82,0.18));
-  }
+  <meta name="keywords"
+    content="bé học số, học chữ cái, học màu sắc, học đếm, dạy trẻ dưới 3 tuổi, học cho bé, ABC, 123, preschool, toddler learning, học mẫu giáo" />
 
-  .decor {
-    position: absolute;
-    opacity: 0.95;
-    pointer-events: none;
-    z-index: 8;
-  }
-  .decor img.emoji { filter: drop-shadow(0 0.4rem 0.6rem rgba(74,59,82,0.15)); }
+  <meta name="robots" content="index,follow,max-image-preview:large">
 
-  /* ---------- HERO / MAP ---------- */
-  .hero {
-    position: relative;
-    height: 100vh;
-    min-height: 68rem;
-    overflow: hidden;
-  }
+  <meta name="author" content="Bé Học Vui">
+  <meta property="og:type" content="website">
 
-  .sun {
-    position: absolute;
-    top: 4%;
-    right: 6%;
-    width: 16rem;
-    height: 16rem;
-    border-radius: 50%;
-    background: radial-gradient(circle at 38% 32%, #FFE8A3, var(--sunshine) 60%, var(--sunshine-dark) 100%);
-    box-shadow: 0 0 6rem rgba(255, 209, 102, 0.55);
-  }
+  <meta property="og:title" content="Bé Học Vui - Học số, chữ cái và màu sắc cho bé dưới 3 tuổi">
 
-  .cloud {
-    position: absolute;
-    opacity: 0.9;
-  }
-  .cloud svg { width: 400%; height: 400%; }
-  .cloud--1 { top: 8%;  left: 6%;  width: 12rem; }
-  .cloud--2 { top: 16%; left: 62%; width: 9rem; }
-  .cloud--3 { top: 4%;  left: 38%; width: 7rem; }
+  <meta property="og:description"
+    content="Website học tập miễn phí dành cho trẻ nhỏ với hình ảnh sinh động, màu sắc tươi sáng và giao diện thân thiện.">
 
-  .brand {
-    position: absolute;
-    top: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    z-index: 20;
-  }
-  .brand .display {
-    font-size: 9.6rem;
-    font-weight: 800;
-    color: var(--coral-dark);
-    text-shadow: 0 0.3rem 0 rgba(255,255,255,0.7);
-    letter-spacing: 0.02em;
-  }
-  .brand p {
-    font-size: 1.5rem;
-    color: var(--plum-soft);
-    font-weight: 700;
-    margin-top: 0.4rem;
-  }
+  <meta property="og:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://duo-forkid.vercel.app">
 
-  .sea {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 40%;
-    background: linear-gradient(180deg, rgba(110,198,232,0.35), var(--sky) 40%, var(--sky-deep));
-    border-radius: 50% 50% 0 0 / 6rem 6rem 0 0;
-  }
-  .sea::before {
-    content: '';
-    position: absolute;
-    top: -1.6rem; left: 0; right: 0; height: 3.2rem;
-    background: repeating-linear-gradient(90deg, #ffffff 0 3rem, transparent 3rem 6rem);
-    opacity: 0.5;
-    border-radius: 50%;
-    animation: waveShift 6s linear infinite;
-  }
-  @keyframes waveShift { from { transform: translateX(0); } to { transform: translateX(-6rem); } }
+  <meta property="og:locale" content="vi_VN">
 
-  .archipelago {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-  }
+  <meta property="og:site_name" content="Bé Học Vui">
+  <meta name="twitter:card" content="summary_large_image">
 
-  .island {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .island-shadow {
-    position: absolute;
-    bottom: -1rem;
-    width: 70%;
-    height: 1.6rem;
-    background: rgba(74,59,82,0.18);
-    border-radius: 50%;
-    filter: blur(0.3rem);
-  }
-  .island-blob {
-    position: relative;
-    width: 15rem;
-    height: 15rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 1.2rem 1.4rem rgba(74,59,82,0.16));
-  }
-  .island-blob svg { width: 100%; height: 100%; }
-  .island-glyph {
-    position: absolute;
-    font-family: var(--font-display);
-    font-weight: 800;
-    color: white;
-    text-shadow: 0 0.3rem 0 rgba(0,0,0,0.12);
-  }
-  .island-label {
-    margin-top: 0.8rem;
-    background: white;
-    padding: 0.6rem 1.6rem;
-    border-radius: 3rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: var(--plum);
-    box-shadow: 0 0.4rem 1rem rgba(74,59,82,0.14);
-  }
+  <meta name="twitter:title" content="Bé Học Vui">
 
-  /* Island positions & sizes */
-  #island-animals   { top: 42%; left: 12%; }
-  #island-numbers   { top: 26%; left: 34%; }
-  #island-numbersv2   { top: 27%; left: 44%; }
-  #island-letters   { top: 46%; left: 56%; }
-  #island-colors    { top: 22%; left: 76%; }
-  #island-reading   { top: 58%; left: 78%; }
+  <meta name="twitter:description" content="Website học số, học chữ và màu sắc cho bé dưới 3 tuổi">
 
-  #island-numbers .island-blob,
-  #island-letters .island-blob { width: 13rem; height: 13rem; }
-  #island-colors .island-blob,
-  #island-reading .island-blob { width: 11.5rem; height: 11.5rem; }
-
-  /* Dotted travel path between islands, drawn on load */
-  .path-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
-  }
-  .path-line {
-    fill: none;
-    stroke: white;
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 2 18;
-    opacity: 0.85;
-  }
-
-  .mascot-dock {
-    position: absolute;
-    bottom: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 15;
-    text-align: center;
-  }
-  .mascot-dock canvas { width: 16rem; height: 16rem; }
-  .speech-bubble {
-    background: white;
-    border-radius: 2rem;
-    padding: 1rem 1.8rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: var(--plum);
-    box-shadow: 0 0.6rem 1.4rem rgba(74,59,82,0.16);
-    display: inline-block;
-    margin-bottom: -0.6rem;
-    position: relative;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 1.4rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.3rem;
-    color: var(--plum-soft);
-    font-weight: 700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    z-index: 15;
-  }
-  .scroll-hint span:first-child { font-size: 2rem; }
-
-  /* ---------- PARENT SECTION (Lenis-smoothed) ---------- */
-  .parents {
-    position: relative;
-    background: var(--cream);
-    padding: 10rem 6vw 12rem;
-  }
-  .parents-inner { max-width: 92rem; margin: 0 auto; }
-  .eyebrow {
-    font-weight: 800;
-    color: var(--coral-dark);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-  }
-  .parents h2 {
-    font-size: 4.2rem;
-    line-height: 1.15;
-    max-width: 70rem;
-  }
-  .parents .lead {
-    font-size: 1.9rem;
-    color: var(--plum-soft);
-    max-width: 60rem;
-    margin-top: 2rem;
-    font-weight: 500;
-    line-height: 1.6;
-  }
-
-  .principle-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
-    margin-top: 8rem;
-  }
-  .principle {
-    background: white;
-    border-radius: 2.4rem;
-    padding: 3.2rem 2.6rem;
-    box-shadow: 0 1rem 2.4rem rgba(74,59,82,0.08);
-  }
-  .principle .num {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: white;
-    background: var(--leaf);
-    width: 3.6rem; height: 3.6rem;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.6rem;
-  }
-  .principle:nth-child(2) .num { background: var(--sky-deep); }
-  .principle:nth-child(3) .num { background: var(--coral); }
-  .principle h3 { font-size: 2.1rem; margin-bottom: 1rem; }
-  .principle p { font-size: 1.5rem; color: var(--plum-soft); line-height: 1.6; font-weight: 500; }
-
-@media (max-width: 760px) {
-    .sun { width: 7rem; height: 7rem; top: 4%; right: 6%; }
-    .cloud--1 { width: 8rem; }
-    .cloud--2 { width: 6rem; }
-    .cloud--3 { width: 5rem; }
-
-    .brand { top: 1.6rem; }
-    .brand .display { font-size: 2.6rem; }
-    .brand p { font-size: 1.3rem; }
-
-    .back-btn, .sound-toggle {
-      width: 5rem; height: 5rem;
-      font-size: 2.2rem;
-      top: 1.2rem;
-    }
-    .sound-toggle { right: 1.2rem; }
-    #settingsToggle { top: 7rem !important; right: 1.2rem; }
-
-    #voicePanel {
-      width: 88vw !important;
-      right: 6vw !important;
-      left: 6vw !important;
-      top: 13rem !important;
+  <meta name="twitter:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <link rel="icon" href="assets/img/Cat_in_Box.svg">
+  <script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebSite",
+ "name":"Bé Học Vui",
+ "url":"https://duo-forkid.vercel.app/",
+ "description":"Website học số, chữ cái và màu sắc cho trẻ dưới 3 tuổi.",
+ "inLanguage":"vi"
+}
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  <style>
+    body {
+      background: linear-gradient(180deg, #BEE7F5 0%, #E6F6FB 38%, var(--cream) 62%);
     }
 
-    .island-blob { width: 10.5rem !important; height: 10.5rem !important; }
-    #island-animals { left: 4%; top: 38%; }
-    #island-numbers { left: 30%; top: 20%; }
-    #island-letters { left: 54%; top: 40%; }
-    #island-colors  { left: 74%; top: 16%; }
-    #island-reading { left: 70%; top: 60%; }
-    .island-label { font-size: 1.3rem; padding: 0.5rem 1.2rem; }
+    /* Twemoji: crisp colorful vector emoji, consistent across every device */
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      vertical-align: -0.15em;
+      display: inline-block;
+      filter: drop-shadow(0 0.3rem 0.3rem rgba(74, 59, 82, 0.18));
+    }
 
-    /* Decorative floaters: scale down, drop a couple to avoid clutter */
-    #decorRainbow { font-size: 4rem !important; top: 6% !important; left: 8% !important; }
-    #decorButterfly1 { font-size: 2.6rem !important; }
-    #decorButterfly2 { display: none; }
-    #decorSparkle1, #decorSparkle2 { font-size: 1.8rem !important; }
-    #decorBalloon { font-size: 3rem !important; left: 4% !important; }
+    .decor {
+      position: absolute;
+      opacity: 0.95;
+      pointer-events: none;
+      z-index: 8;
+    }
 
-    .mascot-dock { bottom: 4%; }
-    .mascot-dock canvas { width: 11rem; height: 11rem; }
-    .speech-bubble { font-size: 1.3rem; padding: 0.7rem 1.4rem; }
+    .decor img.emoji {
+      filter: drop-shadow(0 0.4rem 0.6rem rgba(74, 59, 82, 0.15));
+    }
 
-    .scroll-hint { font-size: 1.1rem; }
+    /* ---------- HERO / MAP ---------- */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 68rem;
+      overflow: hidden;
+    }
 
-    .parents { padding: 6rem 6vw 8rem; }
-    .parents h2 { font-size: 2.8rem; }
-    .parents .lead { font-size: 1.6rem; margin-top: 1.4rem; }
-    .principle-row { grid-template-columns: 1fr; margin-top: 5rem; gap: 2rem; }
-  }
+    .sun {
+      position: absolute;
+      top: 4%;
+      right: 6%;
+      width: 16rem;
+      height: 16rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #FFE8A3, var(--sunshine) 60%, var(--sunshine-dark) 100%);
+      box-shadow: 0 0 6rem rgba(255, 209, 102, 0.55);
+    }
 
-  /* ---------- Very small phones ---------- */
-  @media (max-width: 380px) {
-    .brand .display { font-size: 2.1rem; }
-    .island-blob { width: 8.6rem !important; height: 8.6rem !important; }
-    .island-label { font-size: 1.15rem; }
-    .mascot-dock canvas { width: 9rem; height: 9rem; }
-  }
+    .cloud {
+      position: absolute;
+      opacity: 0.9;
+    }
 
-  /* ---------- Short / landscape screens ---------- */
-  @media (max-height: 480px) {
-    .hero { min-height: 100vh; }
-    .brand { top: 1rem; }
-    .brand .display { font-size: 2rem; }
-    .brand p { display: none; }
-    .mascot-dock { bottom: 2%; }
-    .mascot-dock canvas { width: 8rem; height: 8rem; }
-    .scroll-hint { display: none; }
-    .sea { height: 26%; }
-  }
-</style>
+    .cloud svg {
+      width: 400%;
+      height: 400%;
+    }
+
+    .cloud--1 {
+      top: 8%;
+      left: 6%;
+      width: 12rem;
+    }
+
+    .cloud--2 {
+      top: 16%;
+      left: 62%;
+      width: 9rem;
+    }
+
+    .cloud--3 {
+      top: 4%;
+      left: 38%;
+      width: 7rem;
+    }
+
+    .brand {
+      position: absolute;
+      top: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 20;
+    }
+
+    .brand .display {
+      font-size: 9.6rem;
+      font-weight: 800;
+      color: var(--coral-dark);
+      text-shadow: 0 0.3rem 0 rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      font-size: 1.5rem;
+      color: var(--plum-soft);
+      font-weight: 700;
+      margin-top: 0.4rem;
+    }
+
+    .sea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(180deg, rgba(110, 198, 232, 0.35), var(--sky) 40%, var(--sky-deep));
+      border-radius: 50% 50% 0 0 / 6rem 6rem 0 0;
+    }
+
+    .sea::before {
+      content: '';
+      position: absolute;
+      top: -1.6rem;
+      left: 0;
+      right: 0;
+      height: 3.2rem;
+      background: repeating-linear-gradient(90deg, #ffffff 0 3rem, transparent 3rem 6rem);
+      opacity: 0.5;
+      border-radius: 50%;
+      animation: waveShift 6s linear infinite;
+    }
+
+    @keyframes waveShift {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-6rem);
+      }
+    }
+
+    .archipelago {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+    }
+
+    .island {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .island-shadow {
+      position: absolute;
+      bottom: -1rem;
+      width: 70%;
+      height: 1.6rem;
+      background: rgba(74, 59, 82, 0.18);
+      border-radius: 50%;
+      filter: blur(0.3rem);
+    }
+
+    .island-blob {
+      position: relative;
+      width: 15rem;
+      height: 15rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 1.2rem 1.4rem rgba(74, 59, 82, 0.16));
+    }
+
+    .island-blob svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .island-glyph {
+      position: absolute;
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 0.3rem 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .island-label {
+      margin-top: 0.8rem;
+      background: white;
+      padding: 0.6rem 1.6rem;
+      border-radius: 3rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--plum);
+      box-shadow: 0 0.4rem 1rem rgba(74, 59, 82, 0.14);
+    }
+
+    /* Island positions & sizes */
+    #island-animals {
+      top: 42%;
+      left: 12%;
+    }
+
+    #island-numbers {
+      top: 26%;
+      left: 34%;
+    }
+
+    #island-numbersv2 {
+      top: 27%;
+      left: 44%;
+    }
+
+    #island-letters {
+      top: 46%;
+      left: 56%;
+    }
+
+    #island-colors {
+      top: 22%;
+      left: 76%;
+    }
+
+    #island-reading {
+      top: 58%;
+      left: 78%;
+    }
+
+    #island-numbers .island-blob,
+    #island-letters .island-blob {
+      width: 13rem;
+      height: 13rem;
+    }
+
+    #island-colors .island-blob,
+    #island-reading .island-blob {
+      width: 11.5rem;
+      height: 11.5rem;
+    }
+
+    /* Dotted travel path between islands, drawn on load */
+    .path-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .path-line {
+      fill: none;
+      stroke: white;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 2 18;
+      opacity: 0.85;
+    }
+
+    .mascot-dock {
+      position: absolute;
+      bottom: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      text-align: center;
+    }
+
+    .mascot-dock canvas {
+      width: 16rem;
+      height: 16rem;
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 2rem;
+      padding: 1rem 1.8rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--plum);
+      box-shadow: 0 0.6rem 1.4rem rgba(74, 59, 82, 0.16);
+      display: inline-block;
+      margin-bottom: -0.6rem;
+      position: relative;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.3rem;
+      color: var(--plum-soft);
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      z-index: 15;
+    }
+
+    .scroll-hint span:first-child {
+      font-size: 2rem;
+    }
+
+    /* ---------- PARENT SECTION (Lenis-smoothed) ---------- */
+    .parents {
+      position: relative;
+      background: var(--cream);
+      padding: 10rem 6vw 12rem;
+    }
+
+    .parents-inner {
+      max-width: 92rem;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-weight: 800;
+      color: var(--coral-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .parents h2 {
+      font-size: 4.2rem;
+      line-height: 1.15;
+      max-width: 70rem;
+    }
+
+    .parents .lead {
+      font-size: 1.9rem;
+      color: var(--plum-soft);
+      max-width: 60rem;
+      margin-top: 2rem;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .principle-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      margin-top: 8rem;
+    }
+
+    .principle {
+      background: white;
+      border-radius: 2.4rem;
+      padding: 3.2rem 2.6rem;
+      box-shadow: 0 1rem 2.4rem rgba(74, 59, 82, 0.08);
+    }
+
+    .principle .num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: white;
+      background: var(--leaf);
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.6rem;
+    }
+
+    .principle:nth-child(2) .num {
+      background: var(--sky-deep);
+    }
+
+    .principle:nth-child(3) .num {
+      background: var(--coral);
+    }
+
+    .principle h3 {
+      font-size: 2.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .principle p {
+      font-size: 1.5rem;
+      color: var(--plum-soft);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    @media (max-width: 760px) {
+      .sun {
+        width: 7rem;
+        height: 7rem;
+        top: 4%;
+        right: 6%;
+      }
+
+      .cloud--1 {
+        width: 8rem;
+      }
+
+      .cloud--2 {
+        width: 6rem;
+      }
+
+      .cloud--3 {
+        width: 5rem;
+      }
+
+      .brand {
+        top: 1.6rem;
+      }
+
+      .brand .display {
+        font-size: 2.6rem;
+      }
+
+      .brand p {
+        font-size: 1.3rem;
+      }
+
+      .back-btn,
+      .sound-toggle {
+        width: 5rem;
+        height: 5rem;
+        font-size: 2.2rem;
+        top: 1.2rem;
+      }
+
+      .sound-toggle {
+        right: 1.2rem;
+      }
+
+      #settingsToggle {
+        top: 7rem !important;
+        right: 1.2rem;
+      }
+
+      #voicePanel {
+        width: 88vw !important;
+        right: 6vw !important;
+        left: 6vw !important;
+        top: 13rem !important;
+      }
+
+      .island-blob {
+        width: 10.5rem !important;
+        height: 10.5rem !important;
+      }
+
+      #island-animals {
+        left: 4%;
+        top: 38%;
+      }
+
+      #island-numbers {
+        left: 30%;
+        top: 20%;
+      }
+
+      #island-letters {
+        left: 54%;
+        top: 40%;
+      }
+
+      #island-colors {
+        left: 74%;
+        top: 16%;
+      }
+
+      #island-reading {
+        left: 70%;
+        top: 60%;
+      }
+
+      .island-label {
+        font-size: 1.3rem;
+        padding: 0.5rem 1.2rem;
+      }
+
+      /* Decorative floaters: scale down, drop a couple to avoid clutter */
+      #decorRainbow {
+        font-size: 4rem !important;
+        top: 6% !important;
+        left: 8% !important;
+      }
+
+      #decorButterfly1 {
+        font-size: 2.6rem !important;
+      }
+
+      #decorButterfly2 {
+        display: none;
+      }
+
+      #decorSparkle1,
+      #decorSparkle2 {
+        font-size: 1.8rem !important;
+      }
+
+      #decorBalloon {
+        font-size: 3rem !important;
+        left: 4% !important;
+      }
+
+      .mascot-dock {
+        bottom: 4%;
+      }
+
+      .mascot-dock canvas {
+        width: 11rem;
+        height: 11rem;
+      }
+
+      .speech-bubble {
+        font-size: 1.3rem;
+        padding: 0.7rem 1.4rem;
+      }
+
+      .scroll-hint {
+        font-size: 1.1rem;
+      }
+
+      .parents {
+        padding: 6rem 6vw 8rem;
+      }
+
+      .parents h2 {
+        font-size: 2.8rem;
+      }
+
+      .parents .lead {
+        font-size: 1.6rem;
+        margin-top: 1.4rem;
+      }
+
+      .principle-row {
+        grid-template-columns: 1fr;
+        margin-top: 5rem;
+        gap: 2rem;
+      }
+    }
+
+    /* ---------- Very small phones ---------- */
+    @media (max-width: 380px) {
+      .brand .display {
+        font-size: 2.1rem;
+      }
+
+      .island-blob {
+        width: 8.6rem !important;
+        height: 8.6rem !important;
+      }
+
+      .island-label {
+        font-size: 1.15rem;
+      }
+
+      .mascot-dock canvas {
+        width: 9rem;
+        height: 9rem;
+      }
+    }
+
+    /* ---------- Short / landscape screens ---------- */
+    @media (max-height: 480px) {
+      .hero {
+        min-height: 100vh;
+      }
+
+      .brand {
+        top: 1rem;
+      }
+
+      .brand .display {
+        font-size: 2rem;
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      .mascot-dock {
+        bottom: 2%;
+      }
+
+      .mascot-dock canvas {
+        width: 8rem;
+        height: 8rem;
+      }
+
+      .scroll-hint {
+        display: none;
+      }
+
+      .sea {
+        height: 26%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
-<button class="sound-toggle" id="settingsToggle" style="top:9.4rem;" aria-label="Cài đặt giọng đọc">⚙️</button>
+  <button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+  <button class="sound-toggle" id="settingsToggle" style="top:9.4rem;" aria-label="Cài đặt giọng đọc">⚙️</button>
 
-<div id="voicePanel" style="display:none; position:fixed; top:16rem; right:2rem; z-index:100; background:white; border-radius:2rem; padding:2rem; box-shadow:0 0.6rem 1.6rem rgba(74,59,82,0.18); width:28rem; font-family:var(--font-body);">
-  <div style="font-family:var(--font-display); font-weight:700; font-size:1.6rem; margin-bottom:1.2rem; color:var(--plum);">Giọng đọc</div>
+  <div id="voicePanel"
+    style="display:none; position:fixed; top:16rem; right:2rem; z-index:100; background:white; border-radius:2rem; padding:2rem; box-shadow:0 0.6rem 1.6rem rgba(74,59,82,0.18); width:28rem; font-family:var(--font-body);">
+    <div
+      style="font-family:var(--font-display); font-weight:700; font-size:1.6rem; margin-bottom:1.2rem; color:var(--plum);">
+      Giọng đọc</div>
 
-  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Chọn giọng</label>
-  <select id="voiceSelect" style="width:100%; margin:0.6rem 0 1.6rem; padding:0.8rem; border-radius:1rem; border:0.1rem solid #eee; font-size:1.4rem;"></select>
+    <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Chọn giọng</label>
+    <select id="voiceSelect"
+      style="width:100%; margin:0.6rem 0 1.6rem; padding:0.8rem; border-radius:1rem; border:0.1rem solid #eee; font-size:1.4rem;"></select>
 
-  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Tốc độ nói</label>
-  <input type="range" id="rateSlider" min="0.5" max="1.3" step="0.05" style="width:100%; margin:0.6rem 0 1.6rem;">
+    <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Tốc độ nói</label>
+    <input type="range" id="rateSlider" min="0.5" max="1.3" step="0.05" style="width:100%; margin:0.6rem 0 1.6rem;">
 
-  <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Cao độ giọng</label>
-  <input type="range" id="pitchSlider" min="0.7" max="1.6" step="0.05" style="width:100%; margin:0.6rem 0 1rem;">
+    <label style="font-size:1.3rem; font-weight:700; color:var(--plum-soft);">Cao độ giọng</label>
+    <input type="range" id="pitchSlider" min="0.7" max="1.6" step="0.05" style="width:100%; margin:0.6rem 0 1rem;">
 
-  <button id="testVoiceBtn" style="width:100%; padding:1rem; border-radius:1.2rem; background:var(--sky-deep); color:white; font-weight:700; font-size:1.4rem;">🔊 Nghe thử: "Xin chào bé!"</button>
-</div>
-
-<section class="hero" id="hero">
-  <div class="sun"></div>
-
-  <div class="cloud cloud--1">
-    <svg viewBox="0 0 200 100"><path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z" fill="white"/></svg>
-  </div>
-  <div class="cloud cloud--2">
-    <svg viewBox="0 0 200 100"><path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z" fill="white"/></svg>
-  </div>
-  <div class="cloud cloud--3">
-    <svg viewBox="0 0 200 100"><path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z" fill="white"/></svg>
+    <button id="testVoiceBtn"
+      style="width:100%; padding:1rem; border-radius:1.2rem; background:var(--sky-deep); color:white; font-weight:700; font-size:1.4rem;">🔊
+      Nghe thử: "Xin chào bé!"</button>
   </div>
 
-  <div class="brand">
-    <div class="display">🏝️ Bé Vui Học</div>
-    <p>Chạm vào một hòn đảo để bắt đầu khám phá!</p>
-  </div>
+  <section class="hero" id="hero">
+    <div class="sun"></div>
 
-  <div class="decor" id="decorButterfly1" style="top:30%; left:20%; font-size:6.6rem;">🦋</div>
-  <div class="decor" id="decorButterfly2" style="top:14%; left:52%; font-size:9rem;">🦋</div>
-  <div class="decor" id="decorRainbow" style="top:10%; left:16%; font-size:12rem;">🌈</div>
-  <div class="decor" id="decorSparkle1" style="top:34%; left:68%; font-size:8.6rem;">✨</div>
-  <div class="decor" id="decorSparkle2" style="top:56%; left:30%; font-size:8.2rem;">✨</div>
-  <div class="decor" id="decorBalloon" style="top:60%; left:8%; font-size: 10.4rem;">🎈</div>
-
-  <svg class="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path id="travelPath" class="path-line"
-      d="M 19 50 Q 28 38 41 34 Q 50 42 63 52 Q 72 38 83 30 Q 88 46 85 64"
-      vector-effect="non-scaling-stroke" />
-  </svg>
-
-  <div class="archipelago">
-    <div class="island" id="island-animals" data-topic="animals" data-label="Đảo Con Vật">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="var(--leaf)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:4.2rem;">🐾</span>
-      </div>
-      <div class="island-label">Con Vật</div>
+    <div class="cloud cloud--1">
+      <svg viewBox="0 0 200 100">
+        <path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z"
+          fill="white" />
+      </svg>
+    </div>
+    <div class="cloud cloud--2">
+      <svg viewBox="0 0 200 100">
+        <path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z"
+          fill="white" />
+      </svg>
+    </div>
+    <div class="cloud cloud--3">
+      <svg viewBox="0 0 200 100">
+        <path d="M20 70 Q10 40 45 40 Q50 15 85 25 Q110 5 135 30 Q170 25 165 60 Q180 75 155 80 L30 80 Q5 78 20 70Z"
+          fill="white" />
+      </svg>
     </div>
 
-    <div class="island" id="island-numbers" data-topic="numbers" data-label="Đảo Số Đếm">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="var(--sky-deep)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:4.2rem;">1</span>
-      </div>
-      <div class="island-label">Số Đếm</div>
-    </div>
-    
-    <div class="island" id="island-numbersv2" data-topic="numbersv2" data-label="Đảo Số Đếm">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="#42C171" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:4.2rem;">2</span>
-      </div>
-      <div class="island-label">Số Đếm 2</div>
+    <div class="brand">
+      <div class="display">🏝️ Bé Vui Học</div>
+      <p>Chạm vào một hòn đảo để bắt đầu khám phá!</p>
     </div>
 
-    <div class="island" id="island-letters" data-topic="letters" data-label="Đảo Chữ Cái">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="var(--coral)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:4.2rem;">🅰️</span>
+    <div class="decor" id="decorButterfly1" style="top:30%; left:20%; font-size:6.6rem;">🦋</div>
+    <div class="decor" id="decorButterfly2" style="top:14%; left:52%; font-size:9rem;">🦋</div>
+    <div class="decor" id="decorRainbow" style="top:10%; left:16%; font-size:12rem;">🌈</div>
+    <div class="decor" id="decorSparkle1" style="top:34%; left:68%; font-size:8.6rem;">✨</div>
+    <div class="decor" id="decorSparkle2" style="top:56%; left:30%; font-size:8.2rem;">✨</div>
+    <div class="decor" id="decorBalloon" style="top:60%; left:8%; font-size: 10.4rem;">🎈</div>
+
+    <svg class="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path id="travelPath" class="path-line" d="M 19 50 Q 28 38 41 34 Q 50 42 63 52 Q 72 38 83 30 Q 88 46 85 64"
+        vector-effect="non-scaling-stroke" />
+    </svg>
+
+    <div class="archipelago">
+      <div class="island" id="island-animals" data-topic="animals" data-label="Đảo Con Vật">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="var(--leaf)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:4.2rem;">🐾</span>
+        </div>
+        <div class="island-label">Con Vật</div>
       </div>
-      <div class="island-label">Chữ Cái</div>
+
+      <div class="island" id="island-numbers" data-topic="numbers" data-label="Đảo Số Đếm">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="var(--sky-deep)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:4.2rem;">1</span>
+        </div>
+        <div class="island-label">Số Đếm</div>
+      </div>
+
+      <div class="island" id="island-numbersv2" data-topic="numbersv2" data-label="Đảo Số Đếm">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="#42C171" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:4.2rem;">2</span>
+        </div>
+        <div class="island-label">Số Đếm 2</div>
+      </div>
+
+      <div class="island" id="island-letters" data-topic="letters" data-label="Đảo Chữ Cái">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="var(--coral)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:4.2rem;">🅰️</span>
+        </div>
+        <div class="island-label">Chữ Cái</div>
+      </div>
+
+      <div class="island" id="island-colors" data-topic="colors" data-label="Đảo Màu Sắc">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="var(--sunshine-dark)"
+              d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:3.6rem;">🎨</span>
+        </div>
+        <div class="island-label">Màu Sắc</div>
+      </div>
+
+      <div class="island" id="island-reading" data-topic="reading" data-label="Đảo Tập Đọc">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="#B588D6" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:3.6rem;">📖</span>
+        </div>
+        <div class="island-label">Tập Đọc</div>
+      </div>
     </div>
 
-    <div class="island" id="island-colors" data-topic="colors" data-label="Đảo Màu Sắc">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="var(--sunshine-dark)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:3.6rem;">🎨</span>
-      </div>
-      <div class="island-label">Màu Sắc</div>
+    <div class="mascot-dock">
+      <div class="speech-bubble" id="mascotBubble">Chào bé! 👋</div>
+      <canvas id="mascotCanvas"></canvas>
     </div>
 
-    <div class="island" id="island-reading" data-topic="reading" data-label="Đảo Tập Đọc">
-      <div class="island-blob">
-        <svg viewBox="0 0 100 100"><path fill="#B588D6" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z"/></svg>
-        <span class="island-glyph" style="font-size:3.6rem;">📖</span>
-      </div>
-      <div class="island-label">Tập Đọc</div>
-    </div>
-  </div>
+    <div class="sea"></div>
 
-  <div class="mascot-dock">
-    <div class="speech-bubble" id="mascotBubble">Chào bé! 👋</div>
-    <canvas id="mascotCanvas"></canvas>
-  </div>
+    <a href="#parents" class="scroll-hint">
+      <span>↓</span>
+      <span>Dành cho ba mẹ</span>
+    </a>
+  </section>
 
-  <div class="sea"></div>
+  <section class="parents" id="parents">
+    <div class="parents-inner">
+      <div class="eyebrow">Dành cho ba mẹ</div>
+      <h2>Học mà chơi, không áp lực, không có gì gọi là "sai"</h2>
+      <p class="lead">
+        Bé Vui Học được thiết kế riêng cho các bé dưới 3 tuổi — độ tuổi mà mỗi cái chạm,
+        mỗi âm thanh đều là một khám phá. Không đồng hồ đếm giờ, không điểm số, không thất bại —
+        chỉ có sự tò mò được khuyến khích từng chút một.
+      </p>
 
-  <a href="#parents" class="scroll-hint">
-    <span>↓</span>
-    <span>Dành cho ba mẹ</span>
-  </a>
-</section>
-
-<section class="parents" id="parents">
-  <div class="parents-inner">
-    <div class="eyebrow">Dành cho ba mẹ</div>
-    <h2>Học mà chơi, không áp lực, không có gì gọi là "sai"</h2>
-    <p class="lead">
-      Bé Vui Học được thiết kế riêng cho các bé dưới 3 tuổi — độ tuổi mà mỗi cái chạm,
-      mỗi âm thanh đều là một khám phá. Không đồng hồ đếm giờ, không điểm số, không thất bại —
-      chỉ có sự tò mò được khuyến khích từng chút một.
-    </p>
-
-    <div class="principle-row">
-      <div class="principle">
-        <div class="num">1</div>
-        <h3>Chạm là học</h3>
-        <p>Toàn bộ tương tác chỉ cần một ngón tay chạm nhẹ — phù hợp với khả năng vận động tinh còn non nớt của trẻ nhỏ.</p>
-      </div>
-      <div class="principle">
-        <div class="num">2</div>
-        <h3>Phản hồi tức thì</h3>
-        <p>Mỗi lượt chạm đều có âm thanh, hình ảnh, chuyển động phản hồi ngay lập tức, giúp bé hiểu được mối liên hệ nhân – quả.</p>
-      </div>
-      <div class="principle">
-        <div class="num">3</div>
-        <h3>Không có "thua"</h3>
-        <p>Không có màn hình báo lỗi hay dấu X đỏ. Mọi phản hồi đều nhẹ nhàng khích lệ bé thử lại.</p>
+      <div class="principle-row">
+        <div class="principle">
+          <div class="num">1</div>
+          <h3>Chạm là học</h3>
+          <p>Toàn bộ tương tác chỉ cần một ngón tay chạm nhẹ — phù hợp với khả năng vận động tinh còn non nớt của trẻ
+            nhỏ.</p>
+        </div>
+        <div class="principle">
+          <div class="num">2</div>
+          <h3>Phản hồi tức thì</h3>
+          <p>Mỗi lượt chạm đều có âm thanh, hình ảnh, chuyển động phản hồi ngay lập tức, giúp bé hiểu được mối liên hệ
+            nhân – quả.</p>
+        </div>
+        <div class="principle">
+          <div class="num">3</div>
+          <h3>Không có "thua"</h3>
+          <p>Không có màn hình báo lỗi hay dấu X đỏ. Mọi phản hồi đều nhẹ nhàng khích lệ bé thử lại.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
-<script src="assets/js/mascot.js"></script>
-<script src="assets/js/reward-fx.js"></script>
-<script src="assets/js/sound-manager.js"></script>
-<script>
-  /* ---------- Twemoji: turn every emoji character into a crisp,
-     colorful vector image so the site looks the same bright way
-     on every device/OS ---------- */
-  twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script src="assets/js/mascot.js"></script>
+  <script src="assets/js/reward-fx.js"></script>
+  <script src="assets/js/sound-manager.js"></script>
+  <script>
+    /* ---------- Twemoji: turn every emoji character into a crisp,
+       colorful vector image so the site looks the same bright way
+       on every device/OS ---------- */
+    twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
 
-  /* ---------- Lenis smooth scroll (parent section only needs it,
-     but it's harmless to run globally since the hero is 100vh) ---------- */
-  const lenis = new Lenis({ lerp: 0.11, smoothWheel: true });
-  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-  requestAnimationFrame(raf);
+    /* ---------- Lenis smooth scroll (parent section only needs it,
+       but it's harmless to run globally since the hero is 100vh) ---------- */
+    const lenis = new Lenis({ lerp: 0.11, smoothWheel: true });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
 
-  /* ---------- Sound toggle ---------- */
-  const soundToggle = document.getElementById('soundToggle');
-  soundToggle.addEventListener('click', () => {
-    const nowMuted = !SoundManager.isMuted();
-    SoundManager.setMuted(nowMuted);
-    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
-  });
-  /* ---------- Voice settings panel ---------- */
-  const settingsToggle = document.getElementById('settingsToggle');
-  const voicePanel = document.getElementById('voicePanel');
-  const voiceSelect = document.getElementById('voiceSelect');
-  const rateSlider = document.getElementById('rateSlider');
-  const pitchSlider = document.getElementById('pitchSlider');
-  const testVoiceBtn = document.getElementById('testVoiceBtn');
-
-  settingsToggle.addEventListener('click', () => {
-    voicePanel.style.display = voicePanel.style.display === 'none' ? 'block' : 'none';
-  });
-
-  function populateVoiceList() {
-    const list = SoundManager.getVoices();
-    if (!list.length) return; // voices load async in some browsers, retry via onvoiceschanged
-    const s = SoundManager.getSettings();
-    voiceSelect.innerHTML = list.map(v =>
-      `<option value="${v.voiceURI}">${v.name} (${v.lang})</option>`
-    ).join('');
-    if (s.voiceURI) voiceSelect.value = s.voiceURI;
-    rateSlider.value = s.rate;
-    pitchSlider.value = s.pitch;
-  }
-  populateVoiceList();
-  if (window.speechSynthesis) {
-    window.speechSynthesis.onvoiceschanged = populateVoiceList;
-  }
-
-  voiceSelect.addEventListener('change', () => SoundManager.setVoice(voiceSelect.value));
-  rateSlider.addEventListener('input', () => SoundManager.setRate(parseFloat(rateSlider.value)));
-  pitchSlider.addEventListener('input', () => SoundManager.setPitch(parseFloat(pitchSlider.value)));
-  testVoiceBtn.addEventListener('click', () => SoundManager.speak('Xin chào bé!'));
-  /* ---------- Mascot ---------- */
-  const mascotCanvas = document.getElementById('mascotCanvas');
-  const mascot = createMascot(mascotCanvas, { size: 260 });
-  const bubble = document.getElementById('mascotBubble');
-  const greetings = ['Chào bé! 👋', 'Bé chọn đảo nào nè?', 'Cùng khám phá nhé! ✨'];
-  let gi = 0;
-  setInterval(() => {
-    gi = (gi + 1) % greetings.length;
-    gsap.to(bubble, { opacity: 0, y: 6, duration: 0.25, onComplete: () => {
-      bubble.textContent = greetings[gi];
-      twemoji.parse(bubble, { folder: 'svg', ext: '.svg' });
-      gsap.to(bubble, { opacity: 1, y: 0, duration: 0.25 });
-    }});
-  }, 3400);
-
-  /* ---------- Draw travel path on load ---------- */
-  const pathEl = document.getElementById('travelPath');
-  const pathLen = pathEl.getTotalLength();
-  gsap.set(pathEl, { strokeDasharray: pathLen, strokeDashoffset: pathLen });
-  gsap.to(pathEl, { strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.4,
-    onComplete: () => gsap.set(pathEl, { strokeDasharray: '2 18' }) });
-
-  /* ---------- Decorative floaters: butterflies, sparkles, balloon ---------- */
-  gsap.to('#decorButterfly1', { x: 30, y: -18, rotation: 8, duration: 3.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('#decorButterfly2', { x: -24, y: 16, rotation: -10, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.4 });
-  gsap.to('#decorRainbow', { y: -10, duration: 3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('#decorSparkle1', { scale: 1.4, opacity: 0.4, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('#decorSparkle2', { scale: 1.4, opacity: 0.4, duration: 1.3, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.3 });
-  gsap.to('#decorBalloon', { y: -22, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-
-  /* ---------- Islands: entrance + idle float + interactions ---------- */
-  const islands = gsap.utils.toArray('.island');
-
-  islands.forEach((island, i) => {
-    gsap.from(island, {
-      y: -60, opacity: 0, scale: 0.6, duration: 0.8, delay: 0.15 * i,
-      ease: 'back.out(1.6)'
+    /* ---------- Sound toggle ---------- */
+    const soundToggle = document.getElementById('soundToggle');
+    soundToggle.addEventListener('click', () => {
+      const nowMuted = !SoundManager.isMuted();
+      SoundManager.setMuted(nowMuted);
+      soundToggle.textContent = nowMuted ? '🔇' : '🔊';
     });
-    // idle bob, out of phase per island
-    gsap.to(island, {
-      y: '+=14', duration: 2 + i * 0.3, ease: 'sine.inOut',
-      yoyo: true, repeat: -1, delay: i * 0.2
+    /* ---------- Voice settings panel ---------- */
+    const settingsToggle = document.getElementById('settingsToggle');
+    const voicePanel = document.getElementById('voicePanel');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateSlider = document.getElementById('rateSlider');
+    const pitchSlider = document.getElementById('pitchSlider');
+    const testVoiceBtn = document.getElementById('testVoiceBtn');
+
+    settingsToggle.addEventListener('click', () => {
+      voicePanel.style.display = voicePanel.style.display === 'none' ? 'block' : 'none';
     });
 
-    island.addEventListener('mouseenter', () => {
-      gsap.to(island.querySelector('.island-blob'), { scale: 1.08, rotation: 3, duration: 0.3, ease: 'back.out(2)' });
-    });
-    island.addEventListener('mouseleave', () => {
-      gsap.to(island.querySelector('.island-blob'), { scale: 1, rotation: 0, duration: 0.3 });
+    function populateVoiceList() {
+      const list = SoundManager.getVoices();
+      if (!list.length) return; // voices load async in some browsers, retry via onvoiceschanged
+      const s = SoundManager.getSettings();
+      voiceSelect.innerHTML = list.map(v =>
+        `<option value="${v.voiceURI}">${v.name} (${v.lang})</option>`
+      ).join('');
+      if (s.voiceURI) voiceSelect.value = s.voiceURI;
+      rateSlider.value = s.rate;
+      pitchSlider.value = s.pitch;
+    }
+    populateVoiceList();
+    if (window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+
+    voiceSelect.addEventListener('change', () => SoundManager.setVoice(voiceSelect.value));
+    rateSlider.addEventListener('input', () => SoundManager.setRate(parseFloat(rateSlider.value)));
+    pitchSlider.addEventListener('input', () => SoundManager.setPitch(parseFloat(pitchSlider.value)));
+    testVoiceBtn.addEventListener('click', () => SoundManager.speak('Xin chào bé!'));
+    /* ---------- Mascot ---------- */
+    const mascotCanvas = document.getElementById('mascotCanvas');
+    const mascot = createMascot(mascotCanvas, { size: 260 });
+    const bubble = document.getElementById('mascotBubble');
+    const greetings = ['Chào bé! 👋', 'Bé chọn đảo nào nè?', 'Cùng khám phá nhé! ✨'];
+    let gi = 0;
+    setInterval(() => {
+      gi = (gi + 1) % greetings.length;
+      gsap.to(bubble, {
+        opacity: 0, y: 6, duration: 0.25, onComplete: () => {
+          bubble.textContent = greetings[gi];
+          twemoji.parse(bubble, { folder: 'svg', ext: '.svg' });
+          gsap.to(bubble, { opacity: 1, y: 0, duration: 0.25 });
+        }
+      });
+    }, 3400);
+
+    /* ---------- Draw travel path on load ---------- */
+    const pathEl = document.getElementById('travelPath');
+    const pathLen = pathEl.getTotalLength();
+    gsap.set(pathEl, { strokeDasharray: pathLen, strokeDashoffset: pathLen });
+    gsap.to(pathEl, {
+      strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.4,
+      onComplete: () => gsap.set(pathEl, { strokeDasharray: '2 18' })
     });
 
-    island.addEventListener('click', (e) => {
-      const rect = island.getBoundingClientRect();
-      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
-      mascot.hop();
-      SoundManager.speak(island.dataset.label);
-      gsap.to(island.querySelector('.island-blob'), {
-        scale: 1.25, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut'
+    /* ---------- Decorative floaters: butterflies, sparkles, balloon ---------- */
+    gsap.to('#decorButterfly1', { x: 30, y: -18, rotation: 8, duration: 3.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('#decorButterfly2', { x: -24, y: 16, rotation: -10, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.4 });
+    gsap.to('#decorRainbow', { y: -10, duration: 3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('#decorSparkle1', { scale: 1.4, opacity: 0.4, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('#decorSparkle2', { scale: 1.4, opacity: 0.4, duration: 1.3, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.3 });
+    gsap.to('#decorBalloon', { y: -22, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
+    /* ---------- Islands: entrance + idle float + interactions ---------- */
+    const islands = gsap.utils.toArray('.island');
+
+    islands.forEach((island, i) => {
+      gsap.from(island, {
+        y: -60, opacity: 0, scale: 0.6, duration: 0.8, delay: 0.15 * i,
+        ease: 'back.out(1.6)'
+      });
+      // idle bob, out of phase per island
+      gsap.to(island, {
+        y: '+=14', duration: 2 + i * 0.3, ease: 'sine.inOut',
+        yoyo: true, repeat: -1, delay: i * 0.2
       });
 
-      const topic = island.dataset.topic;
-      const ready = { animals: 'animal-island.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
-      if (ready[topic]) {
-        gsap.to('.hero', {
-          opacity: 0, scale: 1.06, duration: 0.6, delay: 0.5, ease: 'power2.in',
-          onComplete: () => { window.location.href = ready[topic]; }
+      island.addEventListener('mouseenter', () => {
+        gsap.to(island.querySelector('.island-blob'), { scale: 1.08, rotation: 3, duration: 0.3, ease: 'back.out(2)' });
+      });
+      island.addEventListener('mouseleave', () => {
+        gsap.to(island.querySelector('.island-blob'), { scale: 1, rotation: 0, duration: 0.3 });
+      });
+
+      island.addEventListener('click', (e) => {
+        const rect = island.getBoundingClientRect();
+        celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        mascot.hop();
+        SoundManager.speak(island.dataset.label);
+        gsap.to(island.querySelector('.island-blob'), {
+          scale: 1.25, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut'
         });
-      } else {
-        bubble.textContent = 'Sắp ra mắt nhé! 🚧';
-        twemoji.parse(bubble, { folder: 'svg', ext: '.svg' });
-        gsap.fromTo(bubble, { scale: 1 }, { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1 });
-      }
+
+        const topic = island.dataset.topic;
+        const ready = { animals: 'animal-island.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
+        if (ready[topic]) {
+          gsap.to('.hero', {
+            opacity: 0, scale: 1.06, duration: 0.6, delay: 0.5, ease: 'power2.in',
+            onComplete: () => { window.location.href = ready[topic]; }
+          });
+        } else {
+          bubble.textContent = 'Sắp ra mắt nhé! 🚧';
+          twemoji.parse(bubble, { folder: 'svg', ext: '.svg' });
+          gsap.fromTo(bubble, { scale: 1 }, { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1 });
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>
