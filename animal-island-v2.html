@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đảo Con Vật — Bé Vui Học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.css" />
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: linear-gradient(180deg, #DFF3E4 0%, var(--cream) 55%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .deck-wrap {
+    width: 100%;
+    max-width: 44rem;
+    height: min(78vh, 62rem);
+    padding: 0 2rem;
+  }
+
+  .animalSwiper { width: 100%; height: 100%; }
+
+  .swiper-slide {
+    border-radius: 3rem;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 1.6rem 4rem rgba(74,59,82,0.22);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .img-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    background: var(--cream-deep);
+  }
+  .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .zoom-btn, .sound-btn, .mp3-btn {
+    position: absolute;
+    width: 5.4rem; height: 5.4rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.4rem;
+    box-shadow: 0 0.5rem 1.4rem rgba(0,0,0,0.18);
+  }
+
+  .zoom-btn { top: 1.4rem; right: 1.4rem; color: var(--plum); }
+  .sound-btn { bottom: 1.4rem; right: 1.4rem; color: var(--coral-dark); }
+  .mp3-btn { bottom: 1.4rem; left: 1.4rem; color: var(--leaf-dark); }
+  .sound-btn:active, .zoom-btn:active, .mp3-btn:active { transform: scale(0.88); }
+
+  .animal-name {
+    text-align: center;
+    padding: 1.8rem 1rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 3rem;
+    color: var(--plum);
+    background: white;
+  }
+
+  .swiper-pagination-bullet {
+    width: 1.2rem; height: 1.2rem;
+    background: var(--plum-soft);
+    opacity: 0.35;
+  }
+  .swiper-pagination-bullet-active {
+    background: var(--coral);
+    opacity: 1;
+  }
+  .swiper-pagination{
+    bottom: -46px !important;
+  }
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6.4rem; height: 6.4rem;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    color: var(--plum);
+    z-index: 50;
+    box-shadow: 0 0.6rem 1.6rem rgba(74,59,82,0.18);
+  }
+  .nav-arrow:active { transform: translateY(-50%) scale(0.88); }
+  #prevArrow { left: 2rem; }
+  #nextArrow { right: 2rem; }
+
+  @media (max-width: 600px) {
+    .back-btn, .sound-toggle { width: 5rem; height: 5rem; font-size: 2.2rem; top: 1.2rem; }
+    .back-btn { left: 1.2rem; } .sound-toggle { right: 1.2rem; }
+    .nav-arrow { width: 5rem; height: 5rem; font-size: 2.4rem; }
+    #prevArrow { left: 0.8rem; } #nextArrow { right: 0.8rem; }
+    .deck-wrap { height: 68vh; padding: 0 1rem; }
+    .animal-name { font-size: 2.3rem; padding: 1.2rem; }
+    .zoom-btn, .sound-btn, .mp3-btn { width: 4.6rem; height: 4.6rem; font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
+<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+
+<button class="nav-arrow" id="prevArrow" aria-label="Con vật trước">←</button>
+<button class="nav-arrow" id="nextArrow" aria-label="Con vật sau">→</button>
+
+<div class="deck-wrap">
+  <div class="swiper animalSwiper" id="animalSwiper">
+    <div class="swiper-wrapper" id="swiperWrapper"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.umd.js"></script>
+<script src="assets/js/reward-fx.js"></script>
+<script src="assets/js/sound-manager.js"></script>
+<script>
+  /* ============================================
+     Put your downloaded animal images here:
+     assets/images/animals/cat.jpg, cow.jpg, elephant.jpg,
+     duck.jpg, fish.jpg, lion.jpg  (or edit paths below)
+     ============================================ */
+  const ANIMALS = [
+    { id: 'cat',      name: 'Con Mèo', sound: 'Meo meo!',    img: 'assets/img/animals/cat.jpg',      mp3: 'assets/sounds/animals/cat.mp3' },
+    { id: 'cow',      name: 'Con Bò',  sound: 'Ụmbò!',       img: 'assets/img/animals/cow.jpg',      mp3: 'assets/sounds/animals/cow.mp3' },
+    { id: 'elephant', name: 'Con Voi', sound: 'Pò pò!',      img: 'assets/img/animals/elephant.jpg', mp3: 'assets/sounds/animals/elephant.mp3' },
+    { id: 'duck',     name: 'Con Vịt', sound: 'Cạp cạp!',    img: 'assets/img/animals/duck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
+    { id: 'fish',     name: 'Con Cá',  sound: 'Bloop bloop!', img: 'assets/img/animals/fish.jpg',    mp3: 'assets/sounds/animals/fish.mp3' },
+    { id: 'lion',     name: 'Sư Tử',   sound: 'Gầm gầm!',    img: 'assets/img/animals/lion.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
+  ];
+
+  const wrapper = document.getElementById('swiperWrapper');
+  ANIMALS.forEach(a => {
+    const slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    slide.innerHTML = `
+      <div class="img-wrap">
+        <img src="${a.img}" alt="${a.name}">
+        <a href="${a.img}" data-fancybox="animals" data-caption="${a.name}" class="zoom-btn" aria-label="Xem to ${a.name}">🔍</a>
+        <button class="mp3-btn" data-mp3="${a.mp3}" aria-label="Nghe tiếng kêu ${a.name}">🐾</button>
+        <button class="sound-btn" data-name="${a.name}" data-sound="${a.sound}" aria-label="Nghe tên ${a.name}">🔊</button>
+      </div>
+      <div class="animal-name">${a.name}</div>
+    `;
+    wrapper.appendChild(slide);
+  });
+
+  const swiper = new Swiper('#animalSwiper', {
+    effect: 'cards',
+    grabCursor: true,
+    cardsEffect: { slideShadows: false, perSlideOffset: 8, perSlideRotate: 4 },
+    pagination: { el: '.swiper-pagination', clickable: true },
+  });
+
+  Fancybox.bind('[data-fancybox]', {});
+
+  const soundToggle = document.getElementById('soundToggle');
+  soundToggle.addEventListener('click', () => {
+    const nowMuted = !SoundManager.isMuted();
+    SoundManager.setMuted(nowMuted);
+    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
+  });
+
+  function speak(name, sound) {
+    SoundManager.speak(`${name}. ${sound}`);
+  }
+
+  function speakActiveSlide() {
+    const active = wrapper.querySelector('.swiper-slide-active .sound-btn');
+    if (active) speak(active.dataset.name, active.dataset.sound);
+  }
+
+  // Tap the speaker button: play sound + confetti + little bounce
+  wrapper.addEventListener('click', (e) => {
+    const soundBtn = e.target.closest('.sound-btn');
+    const mp3Btn = e.target.closest('.mp3-btn');
+    const btn = soundBtn || mp3Btn;
+    if (!btn) return;
+
+    if (soundBtn) {
+      speak(btn.dataset.name, btn.dataset.sound);
+    } else {
+      SoundManager.playSfx(btn.dataset.mp3);
+    }
+
+    const rect = btn.getBoundingClientRect();
+    celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    gsap.fromTo(btn, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+  });
+
+  document.getElementById('prevArrow').addEventListener('click', () => swiper.slidePrev());
+  document.getElementById('nextArrow').addEventListener('click', () => swiper.slideNext());
+
+  swiper.on('slideChangeTransitionEnd', speakActiveSlide);
+  speakActiveSlide();
+</script>
+</body>
+</html>

@@ -246,7 +246,10 @@
       top: 42%;
       left: 12%;
     }
-
+    #island-animalsv2 {
+      top: 30%;
+      left: 20%;
+    }
     #island-numbers {
       top: 26%;
       left: 34%;
@@ -361,7 +364,16 @@
       max-width: 92rem;
       margin: 0 auto;
     }
-
+    .parents-head{
+      display: flex;
+      justify-content: space-between;
+    }
+    .parents-head_content{
+      width: 45%;
+    }
+    .parents-head figure{
+      width: 50%;
+    }
     .eyebrow {
       font-weight: 800;
       color: var(--coral-dark);
@@ -729,7 +741,17 @@
           </svg>
           <span class="island-glyph" style="font-size:4.2rem;">🐾</span>
         </div>
-        <div class="island-label">Con Vật</div>
+        <div class="island-label">Con Vật (3D)</div>
+      </div>
+
+      <div class="island" id="island-animalsv2" data-topic="animalsv2" data-label="Đảo Con Vật">
+        <div class="island-blob">
+          <svg viewBox="0 0 100 100">
+            <path fill="var(--leaf)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
+          </svg>
+          <span class="island-glyph" style="font-size:4.2rem;">🐾</span>
+        </div>
+        <div class="island-label">Con Vật (Thực Tế)</div>
       </div>
 
       <div class="island" id="island-numbers" data-topic="numbers" data-label="Đảo Số Đếm">
@@ -968,7 +990,7 @@
         });
 
         const topic = island.dataset.topic;
-        const ready = { animals: 'animal-island.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
+        const ready = { animals: 'animal-island.html', animalsv2: 'animal-island-v2.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
         if (ready[topic]) {
           gsap.to('.hero', {
             opacity: 0, scale: 1.06, duration: 0.6, delay: 0.5, ease: 'power2.in',

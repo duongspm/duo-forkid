@@ -63,9 +63,20 @@ const SoundManager = (() => {
   function setRate(val) { settings.rate = val; persist(); }
   function setPitch(val) { settings.pitch = val; persist(); }
   function getSettings() { return { ...settings }; }
+  
+  // Real recorded sound effects (mp3), separate from text-to-speech
+  let sfxAudio = null;
+  function playSfx(url) {
+    if (muted) return;
+    if (!sfxAudio) sfxAudio = new Audio();
+    sfxAudio.pause();
+    sfxAudio.src = url;
+    sfxAudio.currentTime = 0;
+    sfxAudio.play().catch(() => { /* browser blocked autoplay or file missing */ });
+  }
 
   return {
     speak, setMuted, isMuted,
-    getVoices, setVoice, setRate, setPitch, getSettings
+    getVoices, setVoice, setRate, setPitch, getSettings, playSfx
   };
 })();
