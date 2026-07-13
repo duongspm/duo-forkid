@@ -21,8 +21,8 @@
 
   .deck-wrap {
     width: 100%;
-    max-width: 44rem;
-    height: min(78vh, 62rem);
+    max-width: min(80vw, 54rem); /* tăng từ 44rem */
+    height: min(86vh, 70rem); /* tăng chiều cao */
     padding: 0 2rem;
   }
 
@@ -35,9 +35,27 @@
     box-shadow: 0 1.6rem 4rem rgba(74,59,82,0.22);
     display: flex;
     flex-direction: column;
-    /* width: 600px !important; */
+    width: 100% !important;
+    /* transition: filter 0.3s ease, opacity 0.3s ease; */
+    position: relative;
+  }
+  /* .swiper-slide:not(.swiper-slide-active) {
+    filter: blur(0.45rem);
+    opacity: 0.7;
+  } */
+   .swiper-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
+  .swiper-slide:not(.swiper-slide-active)::before {
+    opacity: 1;
+  }
   .img-wrap {
     position: relative;
     flex: 1;
@@ -50,7 +68,13 @@
     object-fit: cover;
     display: block;
   }
-
+  .img-wrap .animal-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--cream-deep);
+  }
   .zoom-btn, .sound-btn, .mp3-btn {
     position: absolute;
     width: 5.4rem; height: 5.4rem;
@@ -144,7 +168,7 @@
      https://pixabay.com/vi/
      ============================================ */
   const ANIMALS = [
-    { id: 'chickens',     name: 'Đàn gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chickens.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
+    { id: 'chickens',     name: 'Đàn gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chickens.jpg',     mp3: 'assets/sounds/animals/chickens.mp3'  },
     { id: 'cat',      name: 'Con Mèo', sound: 'Meo meo!',    img: 'assets/img/animals/cat.jpg',      mp3: 'assets/sounds/animals/cat.mp3' },
     { id: 'cow',      name: 'Con Bò',  sound: 'Ụmbò!',       img: 'assets/img/animals/cows.jpg',      mp3: 'assets/sounds/animals/cow.mp3' },
     { id: 'elephant', name: 'Con Voi', sound: 'Pò pò!',      img: 'assets/img/animals/elephant.jpg', mp3: 'assets/sounds/animals/elephant.mp3' },
@@ -177,10 +201,17 @@
   ANIMALS.forEach(a => {
     const slide = document.createElement('div');
     slide.className = 'swiper-slide';
+    const mediaHtml = a.video
+      ? `<video class="animal-media" src="${a.video}" poster="${a.img}" loop playsinline preload="metadata"></video>`
+      : `<img class="animal-media" src="${a.img}" alt="${a.name}">`;
+
+    const zoomHref = a.video || a.img;
+    const zoomType = a.video ? 'data-type="video"' : '';
+
     slide.innerHTML = `
       <div class="img-wrap">
-        <img src="${a.img}" alt="${a.name}">
-        <a href="${a.img}" data-fancybox="animals" data-caption="${a.name}" class="zoom-btn" aria-label="Xem to ${a.name}">🔍</a>
+        ${mediaHtml}
+        <a href="${zoomHref}" ${zoomType} data-fancybox="animals" data-caption="${a.name}" class="zoom-btn" aria-label="Xem to ${a.name}">🔍</a>
         <button class="mp3-btn" data-mp3="${a.mp3}" aria-label="Nghe tiếng kêu ${a.name}">🐾</button>
         <button class="sound-btn" data-name="${a.name}" data-sound="${a.sound}" aria-label="Nghe tên ${a.name}">🔊</button>
       </div>
@@ -235,8 +266,18 @@
   document.getElementById('prevArrow').addEventListener('click', () => swiper.slidePrev());
   document.getElementById('nextArrow').addEventListener('click', () => swiper.slideNext());
 
-  swiper.on('slideChangeTransitionEnd', speakActiveSlide);
-  speakActiveSlide();
+  function playActiveVideo() {
+      wrapper.querySelectorAll('video.animal-media').forEach(v => {
+        v.pause();
+        v.currentTime = 0;
+      });
+      const activeVideo = wrapper.querySelector('.swiper-slide-active video.animal-media');
+      if (activeVideo) activeVideo.play().catch(() => {});
+    }
+
+    swiper.on('slideChangeTransitionEnd', () => { speakActiveSlide(); playActiveVideo(); });
+    speakActiveSlide();
+    playActiveVideo();
 </script>
 </body>
 </html>
