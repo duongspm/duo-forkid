@@ -396,10 +396,18 @@
     .principle {
       background: white;
       border-radius: 2.4rem;
-      padding: 3.2rem 2.6rem;
+      padding: 3.2rem 2.6rem 10rem;
       box-shadow: 0 1rem 2.4rem rgba(74, 59, 82, 0.08);
+      position: relative;
     }
-
+    .principle figure{
+      position: absolute;
+      width: 50%;
+      height: auto;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
     .principle .num {
       font-family: var(--font-display);
       font-size: 1.4rem;
@@ -791,13 +799,20 @@
 
   <section class="parents" id="parents">
     <div class="parents-inner">
-      <div class="eyebrow">Dành cho ba mẹ</div>
-      <h2>Học mà chơi, không áp lực, không có gì gọi là "sai"</h2>
-      <p class="lead">
-        Bé Vui Học được thiết kế riêng cho các bé dưới 3 tuổi — độ tuổi mà mỗi cái chạm,
-        mỗi âm thanh đều là một khám phá. Không đồng hồ đếm giờ, không điểm số, không thất bại —
-        chỉ có sự tò mò được khuyến khích từng chút một.
-      </p>
+      <div class="parents-head">
+        <div class="parents-head_content">
+          <div class="eyebrow">Dành cho ba mẹ</div>
+          <h2>Học mà chơi, không áp lực, không có gì gọi là "sai"</h2>
+          <p class="lead">
+            Bé Vui Học được thiết kế riêng cho các bé dưới 3 tuổi — độ tuổi mà mỗi cái chạm,
+            mỗi âm thanh đều là một khám phá. Không đồng hồ đếm giờ, không điểm số, không thất bại —
+            chỉ có sự tò mò được khuyến khích từng chút một.
+          </p>
+        </div>
+        <figure>
+          <img src="assets/img/BrickToys.svg" alt="image photo">
+        </figure>
+      </div>
 
       <div class="principle-row">
         <div class="principle">
@@ -805,17 +820,26 @@
           <h3>Chạm là học</h3>
           <p>Toàn bộ tương tác chỉ cần một ngón tay chạm nhẹ — phù hợp với khả năng vận động tinh còn non nớt của trẻ
             nhỏ.</p>
+          <figure>
+            <img src="assets/img/Cat_in_Box.svg" alt="image photo">
+          </figure>
         </div>
         <div class="principle">
           <div class="num">2</div>
           <h3>Phản hồi tức thì</h3>
           <p>Mỗi lượt chạm đều có âm thanh, hình ảnh, chuyển động phản hồi ngay lập tức, giúp bé hiểu được mối liên hệ
             nhân – quả.</p>
+          <figure>
+            <img src="assets/img/CatMovement.svg" alt="image photo">
+          </figure>
         </div>
         <div class="principle">
           <div class="num">3</div>
           <h3>Không có "thua"</h3>
           <p>Không có màn hình báo lỗi hay dấu X đỏ. Mọi phản hồi đều nhẹ nhàng khích lệ bé thử lại.</p>
+          <figure>
+            <img src="assets/img/CuteDoggie.svg" alt="image photo">
+          </figure>
         </div>
       </div>
     </div>
