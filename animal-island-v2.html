@@ -35,6 +35,7 @@
     box-shadow: 0 1.6rem 4rem rgba(74,59,82,0.22);
     display: flex;
     flex-direction: column;
+    /* width: 600px !important; */
   }
 
   .img-wrap {
@@ -140,14 +141,36 @@
      Put your downloaded animal images here:
      assets/images/animals/cat.jpg, cow.jpg, elephant.jpg,
      duck.jpg, fish.jpg, lion.jpg  (or edit paths below)
+     https://pixabay.com/vi/
      ============================================ */
   const ANIMALS = [
+    { id: 'chickens',     name: 'Đàn gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chickens.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
     { id: 'cat',      name: 'Con Mèo', sound: 'Meo meo!',    img: 'assets/img/animals/cat.jpg',      mp3: 'assets/sounds/animals/cat.mp3' },
-    { id: 'cow',      name: 'Con Bò',  sound: 'Ụmbò!',       img: 'assets/img/animals/cow.jpg',      mp3: 'assets/sounds/animals/cow.mp3' },
+    { id: 'cow',      name: 'Con Bò',  sound: 'Ụmbò!',       img: 'assets/img/animals/cows.jpg',      mp3: 'assets/sounds/animals/cow.mp3' },
     { id: 'elephant', name: 'Con Voi', sound: 'Pò pò!',      img: 'assets/img/animals/elephant.jpg', mp3: 'assets/sounds/animals/elephant.mp3' },
     { id: 'duck',     name: 'Con Vịt', sound: 'Cạp cạp!',    img: 'assets/img/animals/duck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
     { id: 'fish',     name: 'Con Cá',  sound: 'Bloop bloop!', img: 'assets/img/animals/fish.jpg',    mp3: 'assets/sounds/animals/fish.mp3' },
+    { id: 'duckss',     name: 'Vịt con', sound: 'Cạp cạp!',    img: 'assets/img/animals/Tinyduck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
     { id: 'lion',     name: 'Sư Tử',   sound: 'Gầm gầm!',    img: 'assets/img/animals/lion.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
+    { id: 'sheep',     name: 'Con Cừu',   sound: 'Beee Beee',    img: 'assets/img/animals/sheep.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
+    { id: 'chicken',     name: 'Con Gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chicken.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
+    { id: 'dog',     name: 'Con Chó', sound: 'Gâu gâu',    img: 'assets/img/animals/dog.jpg',     mp3: 'assets/sounds/animals/dog.mp3' },
+    { id: 'mouse',     name: 'Con Chuột', sound: 'Chíp chíp!',    img: 'assets/img/animals/mouse.jpg',     mp3: 'assets/sounds/animals/mouse.mp3' },
+    { id: 'pig',     name: 'Con Heo', sound: 'Ột ột ột',    img: 'assets/img/animals/pig.jpg',     mp3: 'assets/sounds/animals/pig.mp3' },
+    { id: 'camel',     name: 'Con Lạc đà', sound: '...',    img: 'assets/img/animals/camel.jpg',     mp3: 'assets/sounds/animals/camel.mp3' },
+    { id: 'ducks',     name: 'Đàn Vịt', sound: 'Cạp cạp!',    img: 'assets/img/animals/ducks.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
+    { id: 'rabbit',     name: 'Con Thỏ', sound: '...',    img: 'assets/img/animals/rabbit.jpg',     mp3: 'assets/sounds/animals/rabbit.mp3' },
+    { id: 'hedgehog',     name: 'Con Nhím', sound: '...',    img: 'assets/img/animals/hedgehog.jpg',     mp3: 'assets/sounds/animals/hedgehog.mp3' },
+    { id: 'buffalo',     name: 'Con Trâu', sound: '...',    img: 'assets/img/animals/buffalo.jpg',     mp3: 'assets/sounds/animals/buffalo.mp3' },
+    { id: 'tiger',     name: 'Con Hổ', sound: '...',    img: 'assets/img/animals/tiger.jpg',     mp3: 'assets/sounds/animals/tiger.mp3' },
+    { id: 'wolf',     name: 'Con Chó sói', sound: '...',    img: 'assets/img/animals/wolf.jpg',     mp3: 'assets/sounds/animals/wolf.mp3' },
+    { id: 'squirrel',     name: 'Con Sóc', sound: '...',    img: 'assets/img/animals/squirrel.jpg',     mp3: 'assets/sounds/animals/squirrel.mp3' },
+    { id: 'hippopotamus',     name: 'Con Hà mã', sound: '...',    img: 'assets/img/animals/hippopotamus.jpg',     mp3: 'assets/sounds/animals/hippopotamus.mp3' },
+    { id: 'monkey',     name: 'Con Khỉ', sound: '...',    img: 'assets/img/animals/monkey.jpg',     mp3: 'assets/sounds/animals/monkey.mp3' },
+    { id: 'panda',     name: 'Con Gấu trúc', sound: '...',    img: 'assets/img/animals/panda.jpg',     mp3: 'assets/sounds/animals/panda.mp3' },
+    { id: 'bird',     name: 'Con Chim', sound: '...',    img: 'assets/img/animals/bird.jpg',     mp3: 'assets/sounds/animals/bird.mp3' },
+    { id: 'panther',     name: 'Con Báo', sound: '...',    img: 'assets/img/animals/panther.jpg',     mp3: 'assets/sounds/animals/panther.mp3' },
+
   ];
 
   const wrapper = document.getElementById('swiperWrapper');
