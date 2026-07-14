@@ -74,9 +74,15 @@ const SoundManager = (() => {
     sfxAudio.currentTime = 0;
     sfxAudio.play().catch(() => { /* browser blocked autoplay or file missing */ });
   }
-
+  function cancel() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (sfxAudio) {
+      sfxAudio.pause();
+      sfxAudio.currentTime = 0;
+    }
+  }
   return {
     speak, setMuted, isMuted,
-    getVoices, setVoice, setRate, setPitch, getSettings, playSfx
+    getVoices, setVoice, setRate, setPitch, getSettings, playSfx, cancel
   };
 })();

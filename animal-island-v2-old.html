@@ -63,8 +63,8 @@
 
   .deck-wrap {
     width: 100%;
-    max-width: 54rem;
-    height: min(86vh, 70rem);
+    max-width: min(80vw, 54rem); /* tăng từ 44rem */
+    height: min(86vh, 70rem); /* tăng chiều cao */
     padding: 0 2rem;
   }
 
@@ -77,13 +77,38 @@
     box-shadow: 0 1.6rem 4rem rgba(74,59,82,0.22);
     display: flex;
     flex-direction: column;
+    width: 100% !important;
+    /* transition: filter 0.3s ease, opacity 0.3s ease; */
+    position: relative;
+  }
+  /* .swiper-slide:not(.swiper-slide-active) {
+    filter: blur(0.45rem);
+    opacity: 0.7;
+  } */
+   .swiper-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
+  .swiper-slide:not(.swiper-slide-active)::before {
+    opacity: 1;
+  }
   .img-wrap {
     position: relative;
     flex: 1;
     min-height: 0;
     background: var(--cream-deep);
+  }
+  .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .img-wrap .animal-media {
     width: 100%;
@@ -92,7 +117,6 @@
     display: block;
     background: var(--cream-deep);
   }
-
   .zoom-btn, .sound-btn, .mp3-btn {
     position: absolute;
     width: 5.4rem; height: 5.4rem;
@@ -102,55 +126,11 @@
     font-size: 2.4rem;
     box-shadow: 0 0.5rem 1.4rem rgba(0,0,0,0.18);
   }
+
   .zoom-btn { top: 1.4rem; right: 1.4rem; color: var(--plum); }
   .sound-btn { bottom: 1.4rem; right: 1.4rem; color: var(--coral-dark); }
+  .mp3-btn { bottom: 1.4rem; left: 1.4rem; color: var(--leaf-dark); pointer-events: auto;}
   .sound-btn:active, .zoom-btn:active, .mp3-btn:active { transform: scale(0.88); }
-
-  /* ---------- mp3 control: button + popover panel ---------- */
-  .mp3-control {
-    position: absolute;
-    bottom: 1.4rem;
-    left: 1.4rem;
-  }
-  .mp3-btn { position: static; color: var(--leaf-dark); }
-
-  .mp3-panel {
-    position: absolute;
-    bottom: 6.6rem;
-    left: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    background: rgba(255,255,255,0.97);
-    border-radius: 2rem;
-    padding: 1rem 1.4rem;
-    box-shadow: 0 0.8rem 2rem rgba(74,59,82,0.2);
-    width: 24rem;
-    max-width: 70vw;
-    opacity: 0;
-    transform: translateY(0.6rem);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 30;
-  }
-  .mp3-control:hover .mp3-panel,
-  .mp3-control.open .mp3-panel {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .mp3-playpause, .mp3-mute {
-    flex-shrink: 0;
-    width: 3.2rem; height: 3.2rem;
-    border-radius: 50%;
-    background: var(--cream);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-  }
-  .mp3-seek { flex: 1; min-width: 0; accent-color: var(--leaf); }
-  .mp3-time { font-size: 1.15rem; color: var(--plum-soft); font-weight: 700; flex-shrink: 0; width: 3.4rem; }
-  .mp3-volume { width: 5rem; accent-color: var(--sky-deep); }
 
   .animal-name {
     text-align: center;
@@ -171,7 +151,9 @@
     background: var(--coral);
     opacity: 1;
   }
-
+  .swiper-pagination{
+    bottom: -46px !important;
+  }
   .nav-arrow {
     position: fixed;
     top: 50%;
@@ -197,8 +179,6 @@
     .deck-wrap { height: 68vh; padding: 0 1rem; }
     .animal-name { font-size: 2.3rem; padding: 1.2rem; }
     .zoom-btn, .sound-btn, .mp3-btn { width: 4.6rem; height: 4.6rem; font-size: 2rem; }
-    .mp3-panel { bottom: 5.6rem; width: 21rem; padding: 0.8rem 1.1rem; }
-    .mp3-volume { width: 4rem; }
   }
 </style>
 </head>
@@ -227,6 +207,7 @@
      Put your downloaded animal images here:
      assets/images/animals/cat.jpg, cow.jpg, elephant.jpg,
      duck.jpg, fish.jpg, lion.jpg  (or edit paths below)
+     https://pixabay.com/vi/
      ============================================ */
   const ANIMALS = [
     { id: 'chickens',     name: 'Đàn gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chickens.jpg',     mp3: 'assets/sounds/animals/chickens.mp3', video: 'https://youtu.be/pcTDHc5h8Jo?list=RDpcTDHc5h8Jo'  },
@@ -237,7 +218,7 @@
     { id: 'fish',     name: 'Con Cá',  sound: 'Bloop bloop!', img: 'assets/img/animals/fish.jpg',    mp3: 'assets/sounds/animals/fish.mp3' },
     { id: 'duckss',     name: 'Vịt con', sound: 'Cạp cạp!',    img: 'assets/img/animals/Tinyduck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
     { id: 'lion',     name: 'Sư Tử',   sound: 'Gầm gầm!',    img: 'assets/img/animals/lion.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
-    { id: 'sheep',     name: 'Con Cừu',   sound: 'Beee Beee',    img: 'assets/img/animals/sheep.jpg',     mp3: 'assets/sounds/animals/sheep.mp3' },
+    { id: 'sheep',     name: 'Con Cừu',   sound: 'Beee Beee',    img: 'assets/img/animals/sheep.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
     { id: 'chicken',     name: 'Con Gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chicken.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
     { id: 'dog',     name: 'Con Chó', sound: 'Gâu gâu',    img: 'assets/img/animals/dog.jpg',     mp3: 'assets/sounds/animals/dog.mp3' },
     { id: 'mouse',     name: 'Con Chuột', sound: 'Chíp chíp!',    img: 'assets/img/animals/mouse.jpg',     mp3: 'assets/sounds/animals/mouse.mp3' },
@@ -263,8 +244,9 @@
     const slide = document.createElement('div');
     slide.className = 'swiper-slide';
     const mediaHtml = a.video
-      ? `<video class="animal-media" src="${a.video}" poster="${a.img}" muted loop playsinline preload="metadata"></video>`
+      ? `<video class="animal-media" src="${a.video}" poster="${a.img}" loop playsinline preload="metadata"></video>`
       : `<img class="animal-media" src="${a.img}" alt="${a.name}">`;
+
     const zoomHref = a.video || a.img;
     const zoomType = a.video ? 'data-type="video"' : '';
 
@@ -272,19 +254,8 @@
       <div class="img-wrap">
         ${mediaHtml}
         <a href="${zoomHref}" ${zoomType} data-fancybox="animals" data-caption="${a.name}" class="zoom-btn" aria-label="Xem to ${a.name}">🔍</a>
+        <button class="mp3-btn" data-mp3="${a.mp3}" aria-label="Nghe tiếng kêu ${a.name}">🐾</button>
         <button class="sound-btn" data-name="${a.name}" data-sound="${a.sound}" aria-label="Nghe tên ${a.name}">🔊</button>
-
-        <div class="mp3-control">
-          <button class="mp3-btn" aria-label="Nghe tiếng kêu ${a.name}">🐾</button>
-          <div class="mp3-panel">
-            <button class="mp3-playpause" aria-label="Phát hoặc tạm dừng">▶️</button>
-            <input type="range" class="mp3-seek" min="0" max="100" value="0" step="0.1" aria-label="Tua âm thanh">
-            <span class="mp3-time">0:00</span>
-            <button class="mp3-mute" aria-label="Tắt hoặc bật tiếng">🔊</button>
-            <input type="range" class="mp3-volume" min="0" max="1" value="1" step="0.01" aria-label="Âm lượng">
-          </div>
-          <audio class="mp3-audio" src="${a.mp3}" preload="none"></audio>
-        </div>
       </div>
       <div class="animal-name">${a.name}</div>
     `;
@@ -316,119 +287,46 @@
     if (active) speak(active.dataset.name, active.dataset.sound);
   }
 
-  // Tap the name-speaker button: play sound + confetti + little bounce
+  // Tap the speaker button: play sound + confetti + little bounce
   wrapper.addEventListener('click', (e) => {
-    const btn = e.target.closest('.sound-btn');
+    const soundBtn = e.target.closest('.sound-btn');
+    const mp3Btn = e.target.closest('.mp3-btn');
+    const btn = soundBtn || mp3Btn;
     if (!btn) return;
-    speak(btn.dataset.name, btn.dataset.sound);
+
+    if (soundBtn) {
+      speak(btn.dataset.name, btn.dataset.sound);
+    } else {
+      SoundManager.playSfx(btn.dataset.mp3);
+    }
+
     const rect = btn.getBoundingClientRect();
     celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
     gsap.fromTo(btn, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
   });
 
-  /* ---------- mp3 control: play/pause, seek, volume, mute ---------- */
-  const fmtTime = (s) => {
-    if (!isFinite(s)) return '0:00';
-    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
-    return `${m}:${String(sec).padStart(2, '0')}`;
-  };
-
-  function closeAllPanels(except) {
-    wrapper.querySelectorAll('.mp3-control.open').forEach(c => {
-      if (c !== except) c.classList.remove('open');
-    });
-  }
-
-  // Tap the 🐾 button: toggle the panel open (for touch devices) and play/pause
-  wrapper.addEventListener('click', (e) => {
-    const btn = e.target.closest('.mp3-btn');
-    if (!btn) return;
-    const control = btn.closest('.mp3-control');
-    const audio = control.querySelector('.mp3-audio');
-    closeAllPanels(control);
-    control.classList.toggle('open');
-
-    if (audio.paused) {
-      audio.play().catch(() => {});
-      const rect = btn.getBoundingClientRect();
-      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    } else {
-      audio.pause();
-    }
-    gsap.fromTo(btn, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
-  });
-
-  // Close an open panel when tapping outside of it
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.mp3-control')) closeAllPanels(null);
-  });
-
-  wrapper.addEventListener('click', (e) => {
-    const playBtn = e.target.closest('.mp3-playpause');
-    const muteBtn = e.target.closest('.mp3-mute');
-    if (playBtn) {
-      const audio = playBtn.closest('.mp3-control').querySelector('.mp3-audio');
-      audio.paused ? audio.play().catch(() => {}) : audio.pause();
-    }
-    if (muteBtn) {
-      const audio = muteBtn.closest('.mp3-control').querySelector('.mp3-audio');
-      audio.muted = !audio.muted;
-      muteBtn.textContent = audio.muted ? '🔇' : '🔊';
-    }
-  });
-
-  wrapper.addEventListener('input', (e) => {
-    const seek = e.target.closest('.mp3-seek');
-    const vol = e.target.closest('.mp3-volume');
-    if (seek) {
-      const audio = seek.closest('.mp3-control').querySelector('.mp3-audio');
-      if (audio.duration) audio.currentTime = (seek.value / 100) * audio.duration;
-    }
-    if (vol) {
-      const audio = vol.closest('.mp3-control').querySelector('.mp3-audio');
-      audio.volume = parseFloat(vol.value);
-      audio.muted = false;
-      const muteBtn = vol.closest('.mp3-control').querySelector('.mp3-mute');
-      muteBtn.textContent = '🔊';
-    }
-  });
-
-  // Media events don't bubble, so listen in the CAPTURE phase on an ancestor
-  wrapper.addEventListener('timeupdate', (e) => {
-    const audio = e.target;
-    const control = audio.closest('.mp3-control');
-    if (!control || !audio.duration) return;
-    control.querySelector('.mp3-seek').value = (audio.currentTime / audio.duration) * 100;
-    control.querySelector('.mp3-time').textContent = fmtTime(audio.currentTime);
-  }, true);
-
-  wrapper.addEventListener('play', (e) => {
-    const control = e.target.closest('.mp3-control');
-    if (control) control.querySelector('.mp3-playpause').textContent = '⏸️';
-  }, true);
-
-  wrapper.addEventListener('pause', (e) => {
-    const control = e.target.closest('.mp3-control');
-    if (control) control.querySelector('.mp3-playpause').textContent = '▶️';
-  }, true);
-
   document.getElementById('prevArrow').addEventListener('click', () => swiper.slidePrev());
   document.getElementById('nextArrow').addEventListener('click', () => swiper.slideNext());
-
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+      swiper.slidePrev();
+    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      swiper.slideNext();
+    }
+  });
   function playActiveVideo() {
-    wrapper.querySelectorAll('video.animal-media').forEach(v => { v.pause(); v.currentTime = 0; });
-    const activeVideo = wrapper.querySelector('.swiper-slide-active video.animal-media');
-    if (activeVideo) activeVideo.play().catch(() => {});
-  }
+      wrapper.querySelectorAll('video.animal-media').forEach(v => {
+        v.pause();
+        v.currentTime = 0;
+      });
+      const activeVideo = wrapper.querySelector('.swiper-slide-active video.animal-media');
+      if (activeVideo) activeVideo.play().catch(() => {});
+    }
 
-  swiper.on('slideChangeTransitionEnd', () => {
+    swiper.on('slideChangeTransitionEnd', () => {SoundManager.cancel(); speakActiveSlide(); playActiveVideo(); });
     speakActiveSlide();
     playActiveVideo();
-    closeAllPanels(null);
-    wrapper.querySelectorAll('.mp3-audio').forEach(a => a.pause());
-  });
-  speakActiveSlide();
-  playActiveVideo();
 </script>
 </body>
 </html>
