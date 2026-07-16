@@ -63,7 +63,7 @@
 
   .deck-wrap {
     width: 100%;
-    max-width: 54rem;
+    max-width: 100rem;
     height: min(86vh, 70rem);
     padding: 0 2rem;
   }
@@ -84,13 +84,31 @@
     flex: 1;
     min-height: 0;
     background: var(--cream-deep);
+    background-repeat: repeat;
+    background-size: contain;
+    z-index: 2;
+  }
+  .img-wrap::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2); 
+    /* Hiệu ứng làm mờ */
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); /* Hỗ trợ cho Safari */
+    z-index: -1;
   }
   .img-wrap .animal-media {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
-    background: var(--cream-deep);
+    /* background: var(--cream-deep); */
   }
 
   .zoom-btn, .sound-btn, .mp3-btn {
@@ -172,7 +190,7 @@
     opacity: 1;
   }
   .swiper-pagination{
-    bottom: -56px !important;
+    transform: translate(-25vw, 15vh)  rotate(90deg) !important;
   }
   .nav-arrow {
     position: fixed;
@@ -191,6 +209,56 @@
   #prevArrow { left: 2rem; }
   #nextArrow { right: 2rem; }
 
+  .swiper-controls {
+    position: fixed;
+    top: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0.6rem 1.5rem rgba(74,59,82,0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .swiper-control-btn {
+    width: 3.6rem;
+    height: 3.6rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--plum);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: inset 0 0 0 1px rgba(74,59,82,0.08);
+  }
+  .swiper-control-btn.active {
+    background: var(--coral);
+    color: white;
+  }
+  .swiper-control-label {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--plum-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .swiper-control-range {
+    width: 7rem;
+    accent-color: var(--leaf);
+  }
+  .swiper-control-value {
+    min-width: 2.4rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--plum);
+  }
   .btn-version{
     position: fixed;
     top: 10rem;
@@ -225,8 +293,15 @@
 <body>
 
 <a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
-<a href="animal-island-v3.html" class="btn-version">V3</a>
+<a href="animal-island-v2.html" class="btn-version">V2</a>
 <button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+
+<div class="swiper-controls" aria-label="Điều khiển tự động chạy">
+  <button class="swiper-control-btn" id="autoplayToggle" aria-label="Bật tự động chạy">▶️</button>
+  <span class="swiper-control-label">Tự chạy</span>
+  <input class="swiper-control-range" id="autoplayDelay" type="range" min="2" max="8" step="1" value="3" aria-label="Thời gian tự chạy">
+  <span class="swiper-control-value" id="autoplayValue">3s</span>
+</div>
 
 <button class="nav-arrow" id="prevArrow" aria-label="Con vật trước">←</button>
 <button class="nav-arrow" id="nextArrow" aria-label="Con vật sau">→</button>
@@ -312,12 +387,56 @@
     wrapper.appendChild(slide);
   });
 
-  const swiper = new Swiper('#animalSwiper', {
+  // const swiper = new Swiper('#animalSwiper', {
+  //   effect: 'cards',
+  //   grabCursor: true,
+  //   direction: 'vertical',
+  //   cardsEffect: { slideShadows: false, perSlideOffset: 8, perSlideRotate: 4 },
+  //   pagination: { el: '.swiper-pagination', clickable: true },
+  // });
+
+    const swiper = new Swiper('#animalSwiper', {
+    direction: 'vertical',
     effect: 'cards',
     grabCursor: true,
     cardsEffect: { slideShadows: false, perSlideOffset: 8, perSlideRotate: 4 },
+    speed: 500,
+    autoplay: { delay: 3000, disableOnInteraction: false },
     pagination: { el: '.swiper-pagination', clickable: true },
   });
+
+  const autoplayToggle = document.getElementById('autoplayToggle');
+  const autoplayDelayInput = document.getElementById('autoplayDelay');
+  const autoplayValue = document.getElementById('autoplayValue');
+
+  function updateAutoplayUI() {
+    const delay = Number(autoplayDelayInput.value) * 1000;
+    autoplayValue.textContent = `${autoplayDelayInput.value}s`;
+    swiper.params.autoplay.delay = delay;
+  }
+
+  autoplayDelayInput.addEventListener('input', () => {
+    updateAutoplayUI();
+    if (autoplayToggle.classList.contains('active')) {
+      swiper.autoplay.stop();
+      swiper.autoplay.start();
+    }
+  });
+
+  autoplayToggle.addEventListener('click', () => {
+    const isActive = autoplayToggle.classList.toggle('active');
+    autoplayToggle.textContent = isActive ? '⏸️' : '▶️';
+    autoplayToggle.setAttribute('aria-label', isActive ? 'Tạm dừng tự động chạy' : 'Bật tự động chạy');
+
+    if (isActive) {
+      updateAutoplayUI();
+      swiper.autoplay.start();
+    } else {
+      swiper.autoplay.stop();
+    }
+  });
+
+  updateAutoplayUI();
 
   Fancybox.bind('[data-fancybox]', {});
 
@@ -437,9 +556,9 @@
   document.getElementById('nextArrow').addEventListener('click', () => swiper.slideNext());
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
       swiper.slidePrev();
-    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
       swiper.slideNext();
     }
   });
@@ -450,7 +569,6 @@
   }
 
   swiper.on('slideChangeTransitionEnd', () => {
-    SoundManager.cancel(); 
     speakActiveSlide();
     playActiveVideo();
     closeAllPanels(null);
