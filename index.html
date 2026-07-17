@@ -130,7 +130,7 @@
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
-      z-index: 20;
+      z-index: 2;
     }
 
     .brand .display {
@@ -146,6 +146,7 @@
       color: var(--plum-soft);
       font-weight: 700;
       margin-top: 0.4rem;
+      pointer-events: none;
     }
 
     .sea {
@@ -194,6 +195,7 @@
       align-items: center;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      z-index: 99;
     }
 
     .island-shadow {
@@ -665,6 +667,73 @@
         height: 26%;
       }
     }
+    /* ---------- Satellite islands: multiple levels/versions per island ---------- */
+  .island-satellites {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 25;
+  }
+  .satellite {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translate(0, 0) scale(0);
+    width: 6.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.25s ease;
+    pointer-events: none;
+    text-decoration: none;
+  }
+  .satellite-icon {
+    width: 6rem; height: 6rem;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.6rem;
+    box-shadow: 0 0.6rem 1.4rem rgba(74,59,82,0.22);
+  }
+  .satellite-label {
+    margin-top: 0.5rem;
+    background: white;
+    padding: 0.3rem 1rem;
+    border-radius: 2rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--plum);
+    white-space: nowrap;
+    box-shadow: 0 0.3rem 0.8rem rgba(74,59,82,0.14);
+  }
+  .island:hover .satellite,
+  .island.open .satellite {
+    transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .island .satellite:nth-child(2) { transition-delay: 0.05s; }
+  .island .satellite:nth-child(3) { transition-delay: 0.1s; }
+  .satellite:active .satellite-icon { transform: scale(0.9); }
+
+  .version-badge {
+    position: absolute;
+    top: -0.4rem; right: -0.4rem;
+    background: var(--coral);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 800;
+    width: 2.2rem; height: 2.2rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0.3rem 0.6rem rgba(0,0,0,0.2);
+    font-family: var(--font-display);
+  }
   </style>
 </head>
 
@@ -744,16 +813,6 @@
         <div class="island-label">Con Vật (3D)</div>
       </div>
 
-      <div class="island" id="island-animalsv2" data-topic="animalsv2" data-label="Đảo Con Vật">
-        <div class="island-blob">
-          <svg viewBox="0 0 100 100">
-            <path fill="var(--leaf)" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
-          </svg>
-          <span class="island-glyph" style="font-size:4.2rem;">🐾</span>
-        </div>
-        <div class="island-label">Con Vật (Thực Tế)</div>
-      </div>
-
       <div class="island" id="island-numbers" data-topic="numbers" data-label="Đảo Số Đếm">
         <div class="island-blob">
           <svg viewBox="0 0 100 100">
@@ -762,16 +821,6 @@
           <span class="island-glyph" style="font-size:4.2rem;">1</span>
         </div>
         <div class="island-label">Số Đếm</div>
-      </div>
-
-      <div class="island" id="island-numbersv2" data-topic="numbersv2" data-label="Đảo Số Đếm">
-        <div class="island-blob">
-          <svg viewBox="0 0 100 100">
-            <path fill="#42C171" d="M50 6c22 0 40 15 40 38 0 26-18 50-40 50S10 70 10 44C10 21 28 6 50 6Z" />
-          </svg>
-          <span class="island-glyph" style="font-size:4.2rem;">2</span>
-        </div>
-        <div class="island-label">Số Đếm 2</div>
       </div>
 
       <div class="island" id="island-letters" data-topic="letters" data-label="Đảo Chữ Cái">
@@ -960,13 +1009,76 @@
     gsap.to('#decorBalloon', { y: -22, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
     /* ---------- Islands: entrance + idle float + interactions ---------- */
+    const ISLAND_VERSIONS = {
+    animals: [
+      { label: 'Hình ảnh (tự chuyển)', href: 'animal-island-v3.html', icon: '📷' },
+      { label: 'Hình ảnh', href: 'animal-island-v4.html', icon: '📷' },
+      { label: 'Mô hình 3D', href: 'animal-island.html', icon: '🧊' },
+    ],
+    numbers: [
+      { label: 'Đếm số', href: 'numbers-island.html', icon: '🔢' },
+      { label: 'Thẻ số', href: 'numbers-island-v2.html', icon: '🎴' },
+    ],
+    letters: [
+      { label: 'Nhận biết chữ', href: 'letters-island.html', icon: '🔤' },
+      { label: 'Vườn chữ',      href: 'letters-grid.html',   icon: '🌼' },
+    ],
+  };
+
+  const SAT_OFFSETS = {
+    2: [{ x: -8, y: -8 }, { x: 8, y: -8 }],
+    3: [{ x: -11, y: -6 }, { x: 0, y: -12.5 }, { x: 11, y: -6 }],
+  };
+
+  function buildSatellites(island) {
+    const topic = island.dataset.topic;
+    const versions = ISLAND_VERSIONS[topic];
+    if (!versions || versions.length < 2) return; // only worth a ring when there's a real choice
+
+    const badge = document.createElement('span');
+    badge.className = 'version-badge';
+    badge.textContent = versions.length;
+    island.querySelector('.island-blob').appendChild(badge);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'island-satellites';
+    const offsets = SAT_OFFSETS[versions.length];
+
+    versions.forEach((v, i) => {
+      const sat = document.createElement('a');
+      sat.href = v.href;
+      sat.className = 'satellite';
+      sat.style.setProperty('--sx', offsets[i].x + 'rem');
+      sat.style.setProperty('--sy', offsets[i].y + 'rem');
+      sat.innerHTML = `<span class="satellite-icon">${v.icon}</span><span class="satellite-label">${v.label}</span>`;
+      sat.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        SoundManager.speak(v.label);
+        gsap.to('.hero', {
+          opacity: 0, scale: 1.06, duration: 0.6, delay: 0.3, ease: 'power2.in',
+          onComplete: () => { window.location.href = v.href; }
+        });
+      });
+      wrap.appendChild(sat);
+    });
+
+    island.appendChild(wrap);
+    twemoji.parse(wrap, { folder: 'svg', ext: '.svg' });
+  }
     const islands = gsap.utils.toArray('.island');
 
-    islands.forEach((island, i) => {
-      gsap.from(island, {
-        y: -60, opacity: 0, scale: 0.6, duration: 0.8, delay: 0.15 * i,
-        ease: 'back.out(1.6)'
+    islands.forEach(buildSatellites);
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.island')) islands.forEach(isl => isl.classList.remove('open'));
       });
+
+      islands.forEach((island, i) => {
+        gsap.from(island, {
+          y: -60, opacity: 0, scale: 0.6, duration: 0.8, delay: 0.15 * i,
+          ease: 'back.out(1.6)'
+        });
       // idle bob, out of phase per island
       gsap.to(island, {
         y: '+=14', duration: 2 + i * 0.3, ease: 'sine.inOut',
@@ -981,17 +1093,29 @@
       });
 
       island.addEventListener('click', (e) => {
-        const rect = island.getBoundingClientRect();
-        celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      const topic = island.dataset.topic;
+      const versions = ISLAND_VERSIONS[topic];
+
+      if (versions && versions.length > 1) {
+        e.stopPropagation();
+        const isOpen = island.classList.contains('open');
+        islands.forEach(other => other.classList.remove('open'));
+        island.classList.toggle('open', !isOpen);
         mascot.hop();
         SoundManager.speak(island.dataset.label);
-        gsap.to(island.querySelector('.island-blob'), {
-          scale: 1.25, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut'
-        });
+        return;
+      }
 
-        const topic = island.dataset.topic;
-        const ready = { animals: 'animal-island.html', animalsv2: 'animal-island-v2.html', numbers: 'numbers-island.html', numbersv2: 'numbers-island-v2.html' };
-        if (ready[topic]) {
+      const rect = island.getBoundingClientRect();
+      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      mascot.hop();
+      SoundManager.speak(island.dataset.label);
+      gsap.to(island.querySelector('.island-blob'), {
+        scale: 1.25, duration: 0.25, yoyo: true, repeat: 1, ease: 'power1.inOut'
+      });
+
+      const ready = { animals: 'animal-island-v2.html', numbers: 'numbers-island-v2.html', letters: 'letters-island.html' };
+      if (ready[topic]) {
           gsap.to('.hero', {
             opacity: 0, scale: 1.06, duration: 0.6, delay: 0.5, ease: 'power2.in',
             onComplete: () => { window.location.href = ready[topic]; }

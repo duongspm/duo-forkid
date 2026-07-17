@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Không Tìm Thấy Trang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/common.css">
+  
+  <style>
+    /* Kế thừa hệ màu và font nền tảng từ file style của bạn */
+    :root {
+      --font-display: 'Baloo 2', cursive, sans-serif;
+      --font-body: 'Nunito', sans-serif;
+      --cream: #FFFDF9;
+      --coral: #FF7B54;
+      --coral-dark: #E0533C;
+      --plum: #4A3B52;
+      --plum-soft: #7A6985;
+      --sky: #6EC6E8;
+      --sky-deep: #3FA7D6;
+      --sunshine: #FFD166;
+      --sunshine-dark: #F4A261;
+      --leaf: #06D6A0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, #BEE7F5 0%, #E6F6FB 38%, var(--cream) 62%);
+      min-height: 100vh;
+    }
+
+    /* Twemoji: crisp colorful vector emoji */
+    img.emoji {
+      height: 1em;
+      width: 1em;
+      vertical-align: -0.15em;
+      display: inline-block;
+      filter: drop-shadow(0 0.3rem 0.3rem rgba(74, 59, 82, 0.18));
+    }
+
+    /* ---------- HERO 404 ---------- */
+    .hero-404 {
+      position: relative;
+      height: 100vh;
+      min-height: 60rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .sun {
+      position: absolute;
+      top: 6%;
+      right: 8%;
+      width: 14rem;
+      height: 14rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #FFE8A3, var(--sunshine) 60%, var(--sunshine-dark) 100%);
+      box-shadow: 0 0 6rem rgba(255, 209, 102, 0.55);
+      animation: floatSun 8s ease-in-out infinite;
+    }
+
+    @keyframes floatSun {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Đám mây trôi */
+    .cloud {
+      position: absolute;
+      opacity: 0.85;
+      animation: floatCloud 12s ease-in-out infinite alternate;
+    }
+
+    .cloud--1 {
+      top: 10%;
+      left: 8%;
+      width: 12rem;
+    }
+
+    .cloud--2 {
+      top: 22%;
+      right: 12%;
+      width: 10rem;
+      animation-delay: -3s;
+    }
+
+    .cloud--3 {
+      top: 5%;
+      left: 42%;
+      width: 8rem;
+      animation-delay: -6s;
+    }
+
+    @keyframes floatCloud {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(20px); }
+    }
+
+    /* Khu vực nội dung chính */
+    .content-box {
+      position: relative;
+      z-index: 10;
+      max-width: 60rem;
+      padding: 0 2rem;
+      margin-top: -5rem;
+    }
+
+    .error-code {
+      font-family: var(--font-display);
+      font-size: 14rem;
+      font-weight: 800;
+      color: var(--coral-dark);
+      text-shadow: 0 0.8rem 0 rgba(255, 255, 255, 0.8);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      display: inline-block;
+      position: relative;
+    }
+
+    .error-code span {
+      display: inline-block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .error-code span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .error-code span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .error-title {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--plum);
+      margin-top: 1rem;
+      line-height: 1.2;
+    }
+
+    .error-desc {
+      font-size: 1.7rem;
+      color: var(--plum-soft);
+      font-weight: 500;
+      margin-top: 1.5rem;
+      margin-bottom: 3.5rem;
+      line-height: 1.6;
+    }
+
+    /* Nút Quay lại - Độc quyền theo style giao diện gốc */
+    .back-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--leaf);
+      color: white;
+      text-decoration: none;
+      padding: 1.6rem 3.2rem;
+      border-radius: 50px;
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 0.8rem 2rem rgba(6, 214, 160, 0.35);
+      transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+      cursor: pointer;
+    }
+
+    .back-home-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 1.2rem 2.4rem rgba(6, 214, 160, 0.45);
+      background: #05be8e;
+    }
+
+    .back-home-btn:active {
+      transform: translateY(-1px) scale(1);
+    }
+
+    /* Biển và sóng */
+    .sea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35%;
+      background: linear-gradient(180deg, rgba(110, 198, 232, 0.35), var(--sky) 40%, var(--sky-deep));
+      border-radius: 50% 50% 0 0 / 6rem 6rem 0 0;
+      z-index: 5;
+    }
+
+    .sea::before {
+      content: '';
+      position: absolute;
+      top: -1.6rem;
+      left: 0;
+      right: 0;
+      height: 3.2rem;
+      background: repeating-linear-gradient(90deg, #ffffff 0 3rem, transparent 3rem 6rem);
+      opacity: 0.5;
+      border-radius: 50%;
+      animation: waveShift 6s linear infinite;
+    }
+
+    @keyframes waveShift {
+      from { transform: translateX(0); }
+      to { transform: translateX(-6rem); }
+    }
+
+    /* Linh vật và Bong bóng thoại góc biển */
+    .mascot-dock {
+      margin: 5vw auto;
+      z-index: 15;
+      text-align: center;
+    }
+
+    .mascot-illustration {
+      font-size: 7rem;
+      filter: drop-shadow(0 0.8rem 1rem rgba(74, 59, 82, 0.15));
+      animation: floatMascot 4s ease-in-out infinite;
+      line-height: 1;
+      margin-top: 1rem;
+    }
+
+    @keyframes floatMascot {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(-3deg); }
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 2rem;
+      padding: 1.2rem 2.2rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--plum);
+      box-shadow: 0 0.6rem 1.4rem rgba(74, 59, 82, 0.16);
+      display: inline-block;
+      position: relative;
+      margin-bottom: 0.8rem;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -0.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0.8rem 0.8rem 0;
+      border-style: solid;
+      border-color: white transparent;
+      display: block;
+      width: 0;
+    }
+
+    /* ---------- Responsive cho Mobile / Tablet ---------- */
+    @media (max-width: 760px) {
+      .sun {
+        width: 8rem;
+        height: 8rem;
+        top: 4%;
+        right: 6%;
+      }
+
+      .cloud--1 { width: 8rem; }
+      .cloud--2 { width: 6rem; }
+
+      .error-code {
+        font-size: 9.6rem;
+      }
+
+      .error-title {
+        font-size: 2.4rem;
+      }
+
+      .error-desc {
+        font-size: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .back-home-btn {
+        font-size: 1.6rem;
+        padding: 1.4rem 2.6rem;
+      }
+
+      .mascot-dock {
+        bottom: 2%;
+      }
+
+      .mascot-illustration {
+        font-size: 5.5rem;
+      }
+
+      .speech-bubble {
+        font-size: 1.3rem;
+        padding: 0.8rem 1.6rem;
+      }
+    }
+
+    @media (max-height: 520px) {
+      .error-code { font-size: 7rem; }
+      .error-title { font-size: 2rem; }
+      .error-desc { margin-bottom: 1.5rem; }
+      .sea{    height: 25%;}
+    }
+  </style>
+</head>
+<body>
+
+  <main class="hero-404">
+    <!-- Mặt trời & Mây decor đồng bộ -->
+    <div class="sun"></div>
+    <div class="cloud cloud--1">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='%23ffffff'><path d='M20,40 a20,20 0 0,1 22,-18 a15,15 0 0,1 28,0 a20,20 0 0,1 18,18 a15,15 0 0,1 -15,15 h-50 a13,13 0 0,1 -3,-15 z' /></svg>" alt="Mây">
+    </div>
+    <div class="cloud cloud--2">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='%23ffffff'><path d='M20,40 a20,20 0 0,1 22,-18 a15,15 0 0,1 28,0 a20,20 0 0,1 18,18 a15,15 0 0,1 -15,15 h-50 a13,13 0 0,1 -3,-15 z' /></svg>" alt="Mây">
+    </div>
+    <div class="cloud cloud--3">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' fill='%23ffffff'><path d='M20,40 a20,20 0 0,1 22,-18 a15,15 0 0,1 28,0 a20,20 0 0,1 18,18 a15,15 0 0,1 -15,15 h-50 a13,13 0 0,1 -3,-15 z' /></svg>" alt="Mây">
+    </div>
+
+    <!-- Nội dung thông báo lỗi -->
+    <div class="content-box">
+      <div class="error-code">
+        <span>4</span><span>0</span><span>4</span>
+      </div>
+      <h1 class="error-title">Hòn đảo này không tồn tại!</h1>
+      <p class="error-desc">Hình như lối đi này đã bị sóng cuốn trôi hoặc trang bạn tìm kiếm đã đổi sang một toạ độ khác rồi.</p>
+      
+      <!-- Nút quay về -->
+      <a href="/" class="back-home-btn">
+        <span>Quay về trang chủ</span>
+        <img class="emoji" src="https://abs.twimg.com/emoji/v2/svg/1f3e1.svg" alt="🏡">
+      </a>
+    </div>
+
+    <!-- Sóng biển dưới đáy trang -->
+    <div class="sea"></div>
+
+    <!-- Linh vật & Trạng thái Bong bóng thoại (Mascot Dock) -->
+    <div class="mascot-dock">
+      <div class="speech-bubble">
+        Ui da! Ở đây không có gì hết á... 🏝️
+      </div>
+      <!-- Emoji biểu cảm thay thế cho Canvas để đảm bảo hoạt động nhẹ nhàng mà vẫn đúng tinh thần Twemoji -->
+      <div class="mascot-illustration">
+        <img class="emoji" style="width: 1.2em; height: 1.2em;" src="https://abs.twimg.com/emoji/v2/svg/1f9d9-200d-2942-fe0f.svg" alt="🧙‍♀️">
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

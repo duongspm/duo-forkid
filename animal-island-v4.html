@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đảo Con Vật — Bé Vui Học</title>
+  <meta name="description"
+    content="Website miễn phí giúp bé dưới 3 tuổi học đếm số, bảng chữ cái, màu sắc, hình dạng và phát triển tư duy qua hình ảnh sinh động, âm thanh và trò chơi đơn giản." />
+
+  <meta name="keywords"
+    content="bé học số, học chữ cái, học màu sắc, học đếm, dạy trẻ dưới 3 tuổi, học cho bé, ABC, 123, preschool, toddler learning, học mẫu giáo" />
+
+  <meta name="robots" content="index,follow,max-image-preview:large">
+
+  <meta name="author" content="Bé Học Vui">
+  <meta property="og:type" content="website">
+
+  <meta property="og:title" content="Bé Học Vui - Học số, chữ cái và màu sắc cho bé dưới 3 tuổi">
+
+  <meta property="og:description"
+    content="Website học tập miễn phí dành cho trẻ nhỏ với hình ảnh sinh động, màu sắc tươi sáng và giao diện thân thiện.">
+
+  <meta property="og:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://duo-forkid.vercel.app">
+
+  <meta property="og:locale" content="vi_VN">
+
+  <meta property="og:site_name" content="Bé Học Vui">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="twitter:title" content="Bé Học Vui">
+
+  <meta name="twitter:description" content="Website học số, học chữ và màu sắc cho bé dưới 3 tuổi">
+
+  <meta name="twitter:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <link rel="icon" href="assets/img/Cat_in_Box.svg">
+  <script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebSite",
+ "name":"Bé Học Vui",
+ "url":"https://duo-forkid.vercel.app/",
+ "description":"Website học số, chữ cái và màu sắc cho trẻ dưới 3 tuổi.",
+ "inLanguage":"vi"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/common.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.css" />
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: linear-gradient(180deg, #DFF3E4 0%, var(--cream) 55%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .deck-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 44rem;
+    height: min(78vh, 62rem);
+    padding: 0 2rem;
+  }
+
+  /* ---------- Custom 3D card stack (no external library) ---------- */
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    perspective: 140rem;
+  }
+
+  .card {
+    position: absolute;
+    inset: 0;
+    border-radius: 3rem;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 1.6rem 4rem rgba(74,59,82,0.22);
+    display: flex;
+    flex-direction: column;
+    will-change: transform, opacity;
+    touch-action: none;
+    cursor: grab;
+  }
+  .card:active { cursor: grabbing; }
+
+  .img-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    background: var(--cream-deep);
+  }
+  .img-wrap .animal-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--cream-deep);
+    pointer-events: none; /* let drag pass through the media itself */
+  }
+
+  .zoom-btn, .sound-btn, .mp3-btn {
+    position: absolute;
+    width: 5.4rem; height: 5.4rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.4rem;
+    box-shadow: 0 0.5rem 1.4rem rgba(0,0,0,0.18);
+    touch-action: auto; /* buttons stay tappable even though the card blocks drag scrolling */
+  }
+  .zoom-btn { top: 1.4rem; right: 1.4rem; color: var(--plum); }
+  .sound-btn { bottom: 1.4rem; right: 1.4rem; color: var(--coral-dark); }
+  .sound-btn:active, .zoom-btn:active, .mp3-btn:active { transform: scale(0.88); }
+
+  .mp3-control {
+    position: absolute;
+    bottom: 1.4rem;
+    left: 1.4rem;
+    touch-action: auto;
+  }
+  .mp3-btn { position: static; color: var(--leaf-dark); }
+
+  .mp3-panel {
+    position: absolute;
+    bottom: 6.6rem;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255,255,255,0.97);
+    border-radius: 2rem;
+    padding: 1rem 1.4rem;
+    box-shadow: 0 0.8rem 2rem rgba(74,59,82,0.2);
+    width: 24rem;
+    max-width: 70vw;
+    opacity: 0;
+    transform: translateY(0.6rem);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 999;
+    touch-action: auto;
+  }
+  .mp3-control:hover .mp3-panel,
+  .mp3-control.open .mp3-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mp3-playpause, .mp3-mute {
+    flex-shrink: 0;
+    width: 3.2rem; height: 3.2rem;
+    border-radius: 50%;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .mp3-seek { flex: 1; min-width: 0; accent-color: var(--leaf); touch-action: auto; }
+  .mp3-time { font-size: 1.15rem; color: var(--plum-soft); font-weight: 700; flex-shrink: 0; width: 3.4rem; }
+  .mp3-volume { width: 5rem; accent-color: var(--sky-deep); touch-action: auto; }
+
+  .animal-name {
+    text-align: center;
+    padding: 1.8rem 1rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 3rem;
+    color: var(--plum);
+    background: white;
+  }
+
+  .dots {
+    position: fixed;
+    bottom: 2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.9rem;
+    z-index: 50;
+  }
+  .dot {
+    width: 1.2rem; height: 1.2rem;
+    border-radius: 50%;
+    background: rgba(74,59,82,0.25);
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+  .dot.active { background: var(--coral); transform: scale(1.3); }
+
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6.4rem; height: 6.4rem;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    color: var(--plum);
+    z-index: 50;
+    box-shadow: 0 0.6rem 1.6rem rgba(74,59,82,0.18);
+  }
+  .nav-arrow:active { transform: translateY(-50%) scale(0.88); }
+  #prevArrow { left: 2rem; }
+  #nextArrow { right: 2rem; }
+
+  @media (max-width: 600px) {
+    .back-btn, .sound-toggle { width: 5rem; height: 5rem; font-size: 2.2rem; top: 1.2rem; }
+    .back-btn { left: 1.2rem; } .sound-toggle { right: 1.2rem; }
+    .nav-arrow { width: 5rem; height: 5rem; font-size: 2.4rem; }
+    #prevArrow { left: 0.8rem; } #nextArrow { right: 0.8rem; }
+    .deck-wrap { height: 68vh; padding: 0 1rem; }
+    .animal-name { font-size: 2.3rem; padding: 1.2rem; }
+    .zoom-btn, .sound-btn, .mp3-btn { width: 4.6rem; height: 4.6rem; font-size: 2rem; }
+    .mp3-panel { bottom: 5.6rem; width: 21rem; padding: 0.8rem 1.1rem; }
+    .mp3-volume { width: 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
+<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+
+<button class="nav-arrow" id="prevArrow" aria-label="Con vật trước">←</button>
+<button class="nav-arrow" id="nextArrow" aria-label="Con vật sau">→</button>
+
+<div class="deck-wrap">
+  <div class="card-stack" id="cardStack"></div>
+</div>
+<div class="dots" id="dots"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1/dist/fancybox/fancybox.umd.js"></script>
+<script src="assets/js/reward-fx.js"></script>
+<script src="assets/js/sound-manager.js"></script>
+<script>
+  /* ============================================
+     Put your downloaded animal images/videos here:
+     assets/images/animals/*.jpg, assets/sounds/animals/*.mp3,
+     assets/videos/animals/*.mp4 (video optional per animal)
+     ============================================ */
+  const ANIMALS = [
+    { id: 'chickens',     name: 'Đàn gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chickens.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
+    { id: 'cat',      name: 'Con Mèo', sound: 'Meo meo!',    img: 'assets/img/animals/cat.jpg',      mp3: 'assets/sounds/animals/cat.mp3' },
+    { id: 'cow',      name: 'Con Bò',  sound: 'Ụmbò!',       img: 'assets/img/animals/cows.jpg',      mp3: 'assets/sounds/animals/cow.mp3' },
+    { id: 'elephant', name: 'Con Voi', sound: 'Pò pò!',      img: 'assets/img/animals/elephant.jpg', mp3: 'assets/sounds/animals/elephant.mp3' },
+    { id: 'duck',     name: 'Con Vịt', sound: 'Cạp cạp!',    img: 'assets/img/animals/duck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
+    { id: 'fish',     name: 'Con Cá',  sound: 'Bloop bloop!', img: 'assets/img/animals/fish.jpg',    mp3: 'assets/sounds/animals/fish.mp3' },
+    { id: 'duckss',     name: 'Vịt con', sound: 'Cạp cạp!',    img: 'assets/img/animals/Tinyduck.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
+    { id: 'lion',     name: 'Sư Tử',   sound: 'Gầm gầm!',    img: 'assets/img/animals/lion.jpg',     mp3: 'assets/sounds/animals/lion.mp3' },
+    { id: 'sheep',     name: 'Con Cừu',   sound: 'Beee Beee',    img: 'assets/img/animals/sheep.jpg',     mp3: 'assets/sounds/animals/sheep.mp3' },
+    { id: 'chicken',     name: 'Con Gà',   sound: 'Ò ó o o o',    img: 'assets/img/animals/chicken.jpg',     mp3: 'assets/sounds/animals/chickens.mp3' },
+    { id: 'dog',     name: 'Con Chó', sound: 'Gâu gâu',    img: 'assets/img/animals/dog.jpg',     mp3: 'assets/sounds/animals/dog.mp3' },
+    { id: 'mouse',     name: 'Con Chuột', sound: 'Chíp chíp!',    img: 'assets/img/animals/mouse.jpg',     mp3: 'assets/sounds/animals/mouse.mp3' },
+    { id: 'pig',     name: 'Con Heo', sound: 'Ột ột ột',    img: 'assets/img/animals/pig.jpg',     mp3: 'assets/sounds/animals/pig.mp3' },
+    { id: 'camel',     name: 'Con Lạc đà', sound: '...',    img: 'assets/img/animals/camel.jpg',     mp3: 'assets/sounds/animals/camel.mp3' },
+    { id: 'ducks',     name: 'Đàn Vịt', sound: 'Cạp cạp!',    img: 'assets/img/animals/ducks.jpg',     mp3: 'assets/sounds/animals/duck.mp3' },
+    { id: 'rabbit',     name: 'Con Thỏ', sound: '...',    img: 'assets/img/animals/rabbit.jpg',     mp3: 'assets/sounds/animals/rabbit.mp3' },
+    { id: 'hedgehog',     name: 'Con Nhím', sound: '...',    img: 'assets/img/animals/hedgehog.jpg',     mp3: 'assets/sounds/animals/hedgehog.mp3' },
+    { id: 'buffalo',     name: 'Con Trâu', sound: '...',    img: 'assets/img/animals/buffalo.jpg',     mp3: 'assets/sounds/animals/buffalo.mp3' },
+    { id: 'tiger',     name: 'Con Hổ', sound: '...',    img: 'assets/img/animals/tiger.jpg',     mp3: 'assets/sounds/animals/tiger.mp3' },
+    { id: 'wolf',     name: 'Con Chó sói', sound: '...',    img: 'assets/img/animals/wolf.jpg',     mp3: 'assets/sounds/animals/wolf.mp3' },
+    { id: 'squirrel',     name: 'Con Sóc', sound: '...',    img: 'assets/img/animals/squirrel.jpg',     mp3: 'assets/sounds/animals/squirrel.mp3' },
+    { id: 'hippopotamus',     name: 'Con Hà mã', sound: '...',    img: 'assets/img/animals/hippopotamus.jpg',     mp3: 'assets/sounds/animals/hippopotamus.mp3' },
+    { id: 'monkey',     name: 'Con Khỉ', sound: '...',    img: 'assets/img/animals/monkey.jpg',     mp3: 'assets/sounds/animals/monkey.mp3' },
+    { id: 'panda',     name: 'Con Gấu trúc', sound: '...',    img: 'assets/img/animals/panda.jpg',     mp3: 'assets/sounds/animals/panda.mp3' },
+    { id: 'bird',     name: 'Con Chim', sound: '...',    img: 'assets/img/animals/bird.jpg',     mp3: 'assets/sounds/animals/bird.mp3' },
+    { id: 'panther',     name: 'Con Báo', sound: '...',    img: 'assets/img/animals/panther.jpg',     mp3: 'assets/sounds/animals/panther.mp3' },
+
+  ];
+
+  const stackEl = document.getElementById('cardStack');
+  const dotsWrap = document.getElementById('dots');
+  const soundToggle = document.getElementById('soundToggle');
+  const prevArrow = document.getElementById('prevArrow');
+  const nextArrow = document.getElementById('nextArrow');
+
+  soundToggle.addEventListener('click', () => {
+    const nowMuted = !SoundManager.isMuted();
+    SoundManager.setMuted(nowMuted);
+    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
+  });
+
+  // order[0] = the animal index currently on top of the stack (front card)
+  let order = ANIMALS.map((_, i) => i);
+  const cardEls = [];
+
+  ANIMALS.forEach((a, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.idx = i;
+
+    const mediaHtml = a.video
+      ? `<video class="animal-media" src="${a.video}" poster="${a.img}" muted loop playsinline preload="metadata"></video>`
+      : `<img class="animal-media" src="${a.img}" alt="${a.name}">`;
+    const zoomHref = a.video || a.img;
+    const zoomType = a.video ? 'data-type="video"' : '';
+
+    card.innerHTML = `
+      <div class="img-wrap">
+        ${mediaHtml}
+        <a href="${zoomHref}" ${zoomType} data-fancybox="animals" data-caption="${a.name}" class="zoom-btn" aria-label="Xem to ${a.name}">🔍</a>
+        <button class="sound-btn" data-name="${a.name}" data-sound="${a.sound}" aria-label="Nghe tên ${a.name}">🔊</button>
+        <div class="mp3-control">
+          <button class="mp3-btn" aria-label="Nghe tiếng kêu ${a.name}">🐾</button>
+          <div class="mp3-panel">
+            <button class="mp3-playpause" aria-label="Phát hoặc tạm dừng">▶️</button>
+            <input type="range" class="mp3-seek" min="0" max="100" value="0" step="0.1" aria-label="Tua âm thanh">
+            <span class="mp3-time">0:00</span>
+            <button class="mp3-mute" aria-label="Tắt hoặc bật tiếng">🔊</button>
+            <input type="range" class="mp3-volume" min="0" max="1" value="1" step="0.01" aria-label="Âm lượng">
+          </div>
+          <audio class="mp3-audio" src="${a.mp3}" preload="none"></audio>
+        </div>
+      </div>
+      <div class="animal-name">${a.name}</div>
+    `;
+    stackEl.appendChild(card);
+    cardEls[i] = card;
+
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.dataset.idx = i;
+    dot.addEventListener('click', () => goToFront(i));
+    dotsWrap.appendChild(dot);
+  });
+
+  Fancybox.bind('[data-fancybox]', {});
+
+  /* ---------- 3D stack positions: front, and up to 2 peeking behind ---------- */
+  const STACK_POSITIONS = [
+    { x: 0, y: 0,   scale: 1,    rotate: 0,  opacity: 1,   zIndex: 60 },
+    { x: 0, y: -16, scale: 0.94, rotate: -3, opacity: 1,   zIndex: 50 },
+    { x: 0, y: -30, scale: 0.88, rotate: 3,  opacity: 0.9, zIndex: 40 },
+    { x: 0, y: -40, scale: 0.82, rotate: 0,  opacity: 0,   zIndex: 0  },
+  ];
+  const styleFor = (pos) => STACK_POSITIONS[Math.min(pos, STACK_POSITIONS.length - 1)];
+  const DRAG_THRESHOLD = 110;
+
+  function updateDots() {
+    dotsWrap.querySelectorAll('.dot').forEach(d => {
+      d.classList.toggle('active', Number(d.dataset.idx) === order[0]);
+    });
+  }
+
+  function speak(name, sound) { SoundManager.speak(`${name}. ${sound}`); }
+
+  function speakFront() {
+    const a = ANIMALS[order[0]];
+    speak(a.name, a.sound);
+  }
+
+  function playFrontVideo() {
+    cardEls.forEach(c => {
+      const v = c.querySelector('video.animal-media');
+      if (v) { v.pause(); v.currentTime = 0; }
+    });
+    const frontVideo = cardEls[order[0]].querySelector('video.animal-media');
+    if (frontVideo) frontVideo.play().catch(() => {});
+  }
+
+  function closeAllPanels(except) {
+    stackEl.querySelectorAll('.mp3-control.open').forEach(c => {
+      if (c !== except) c.classList.remove('open');
+    });
+  }
+
+  function pauseAllMp3() {
+    stackEl.querySelectorAll('.mp3-audio').forEach(a => a.pause());
+  }
+
+  function onFrontChanged() {
+    updateDots();
+    speakFront();
+    playFrontVideo();
+    closeAllPanels(null);
+    pauseAllMp3();
+  }
+
+  function renderStack(animate) {
+    order.forEach((animalIdx, pos) => {
+      const card = cardEls[animalIdx];
+      const s = styleFor(pos);
+      card.style.zIndex = s.zIndex;
+      card.style.pointerEvents = pos === 0 ? 'auto' : 'none';
+      if (animate) {
+        gsap.to(card, { x: s.x, y: s.y, scale: s.scale, rotate: s.rotate, opacity: s.opacity, duration: 0.5, ease: 'back.out(1.6)' });
+      } else {
+        gsap.set(card, { x: s.x, y: s.y, scale: s.scale, rotate: s.rotate, opacity: s.opacity });
+      }
+    });
+  }
+
+  // Send the front card flying off (like a card being pulled from front to back of a deck)
+  function dismissFront(direction) {
+    const idx = order[0];
+    const card = cardEls[idx];
+    const flyX = direction * (window.innerWidth * 0.9 + 200);
+    gsap.to(card, {
+      x: flyX, y: 40, rotate: direction * 22, duration: 0.4, ease: 'power2.in',
+      onComplete: () => {
+        gsap.set(card, { x: 0, y: 0, rotate: 0 });
+        order.push(order.shift());
+        renderStack(true);
+        onFrontChanged();
+      }
+    });
+  }
+
+  // Pull the back-most card around to the front (reverse of dismissFront)
+  function bringPrevToFront() {
+    const idx = order.pop();
+    order.unshift(idx);
+    const card = cardEls[idx];
+    gsap.set(card, { x: -(window.innerWidth * 0.9 + 200), y: 40, rotate: -22 });
+    renderStack(true);
+    onFrontChanged();
+  }
+
+  function goToFront(targetIdx) {
+    if (targetIdx === order[0]) return;
+    // Rotate the deck until targetIdx is at the front (shortest direction)
+    const steps = order.indexOf(targetIdx);
+    for (let i = 0; i < steps; i++) order.push(order.shift());
+    renderStack(true);
+    onFrontChanged();
+  }
+
+  /* ---------- Drag interaction on the front card ---------- */
+  cardEls.forEach((card) => {
+    let dragging = false, startX = 0, startY = 0, dx = 0, dy = 0;
+
+    card.addEventListener('pointerdown', (e) => {
+      const idx = Number(card.dataset.idx);
+      if (order[0] !== idx) return;
+      if (e.target.closest('.zoom-btn, .sound-btn, .mp3-control')) return;
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      card.setPointerCapture(e.pointerId);
+    });
+
+    card.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      dy = e.clientY - startY;
+      gsap.set(card, { x: dx, y: dy * 0.3, rotate: dx / 18 });
+
+      const behindIdx = order[1];
+      if (behindIdx !== undefined) {
+        const p = Math.min(Math.abs(dx) / DRAG_THRESHOLD, 1);
+        gsap.set(cardEls[behindIdx], {
+          y: gsap.utils.interpolate(-16, 0, p),
+          scale: gsap.utils.interpolate(0.94, 1, p),
+        });
+      }
+    });
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      if (Math.abs(dx) > DRAG_THRESHOLD) {
+        dismissFront(dx > 0 ? 1 : -1);
+      } else {
+        gsap.to(card, { x: 0, y: 0, rotate: 0, duration: 0.45, ease: 'elastic.out(1,0.7)' });
+        const behindIdx = order[1];
+        if (behindIdx !== undefined) {
+          const s = STACK_POSITIONS[1];
+          gsap.to(cardEls[behindIdx], { y: s.y, scale: s.scale, duration: 0.45, ease: 'elastic.out(1,0.7)' });
+        }
+      }
+      dx = 0; dy = 0;
+    }
+    card.addEventListener('pointerup', endDrag);
+    card.addEventListener('pointercancel', endDrag);
+  });
+
+  /* ---------- mp3 control: play/pause, seek, volume, mute ---------- */
+  const fmtTime = (s) => {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${String(sec).padStart(2, '0')}`;
+  };
+
+  stackEl.addEventListener('click', (e) => {
+    const soundBtn = e.target.closest('.sound-btn');
+    if (soundBtn) {
+      speak(soundBtn.dataset.name, soundBtn.dataset.sound);
+      const rect = soundBtn.getBoundingClientRect();
+      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      gsap.fromTo(soundBtn, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+      return;
+    }
+
+    const mp3Btn = e.target.closest('.mp3-btn');
+    if (mp3Btn) {
+      const control = mp3Btn.closest('.mp3-control');
+      const audio = control.querySelector('.mp3-audio');
+      closeAllPanels(control);
+      control.classList.toggle('open');
+      if (audio.paused) {
+        audio.play().catch(() => {});
+        const rect = mp3Btn.getBoundingClientRect();
+        celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      } else {
+        audio.pause();
+      }
+      gsap.fromTo(mp3Btn, { scale: 1.25 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+      return;
+    }
+
+    const playBtn = e.target.closest('.mp3-playpause');
+    if (playBtn) {
+      const audio = playBtn.closest('.mp3-control').querySelector('.mp3-audio');
+      audio.paused ? audio.play().catch(() => {}) : audio.pause();
+      return;
+    }
+
+    const muteBtn = e.target.closest('.mp3-mute');
+    if (muteBtn) {
+      const audio = muteBtn.closest('.mp3-control').querySelector('.mp3-audio');
+      audio.muted = !audio.muted;
+      muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+      return;
+    }
+
+    if (!e.target.closest('.mp3-control')) closeAllPanels(null);
+  });
+
+  stackEl.addEventListener('input', (e) => {
+    const seek = e.target.closest('.mp3-seek');
+    const vol = e.target.closest('.mp3-volume');
+    if (seek) {
+      const audio = seek.closest('.mp3-control').querySelector('.mp3-audio');
+      if (audio.duration) audio.currentTime = (seek.value / 100) * audio.duration;
+    }
+    if (vol) {
+      const control = vol.closest('.mp3-control');
+      const audio = control.querySelector('.mp3-audio');
+      audio.volume = parseFloat(vol.value);
+      audio.muted = false;
+      control.querySelector('.mp3-mute').textContent = '🔊';
+    }
+  });
+
+  // Media events don't bubble — listen in the CAPTURE phase to catch them from any card's <audio>
+  stackEl.addEventListener('timeupdate', (e) => {
+    const audio = e.target;
+    const control = audio.closest('.mp3-control');
+    if (!control || !audio.duration) return;
+    control.querySelector('.mp3-seek').value = (audio.currentTime / audio.duration) * 100;
+    control.querySelector('.mp3-time').textContent = fmtTime(audio.currentTime);
+  }, true);
+
+  stackEl.addEventListener('play', (e) => {
+    const control = e.target.closest('.mp3-control');
+    if (control) control.querySelector('.mp3-playpause').textContent = '⏸️';
+  }, true);
+
+  stackEl.addEventListener('pause', (e) => {
+    const control = e.target.closest('.mp3-control');
+    if (control) control.querySelector('.mp3-playpause').textContent = '▶️';
+  }, true);
+
+  nextArrow.addEventListener('click', () => dismissFront(1));
+  prevArrow.addEventListener('click', () => bringPrevToFront());
+
+  // Init
+  renderStack(false);
+  onFrontChanged();
+</script>
+</body>
+</html>

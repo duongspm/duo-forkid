@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đảo Chữ Cái — Bé Vui Học</title>
+<meta name="description"
+    content="Website miễn phí giúp bé dưới 3 tuổi học đếm số, bảng chữ cái, màu sắc, hình dạng và phát triển tư duy qua hình ảnh sinh động, âm thanh và trò chơi đơn giản." />
+
+  <meta name="keywords"
+    content="bé học số, học chữ cái, học màu sắc, học đếm, dạy trẻ dưới 3 tuổi, học cho bé, ABC, 123, preschool, toddler learning, học mẫu giáo" />
+
+  <meta name="robots" content="index,follow,max-image-preview:large">
+
+  <meta name="author" content="Bé Học Vui">
+  <meta property="og:type" content="website">
+
+  <meta property="og:title" content="Bé Học Vui - Học số, chữ cái và màu sắc cho bé dưới 3 tuổi">
+
+  <meta property="og:description"
+    content="Website học tập miễn phí dành cho trẻ nhỏ với hình ảnh sinh động, màu sắc tươi sáng và giao diện thân thiện.">
+
+  <meta property="og:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://duo-forkid.vercel.app">
+
+  <meta property="og:locale" content="vi_VN">
+
+  <meta property="og:site_name" content="Bé Học Vui">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="twitter:title" content="Bé Học Vui">
+
+  <meta name="twitter:description" content="Website học số, học chữ và màu sắc cho bé dưới 3 tuổi">
+
+  <meta name="twitter:image" content="https://duo-forkid.vercel.app/assets/og-image.jpg">
+  <link rel="icon" href="assets/img/Cat_in_Box.svg">
+  <script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebSite",
+ "name":"Bé Học Vui",
+ "url":"https://duo-forkid.vercel.app/",
+ "description":"Website học số, chữ cái và màu sắc cho trẻ dưới 3 tuổi.",
+ "inLanguage":"vi"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/common.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { background: #222; }
+
+  img.emoji {
+    height: 1em; width: 1em;
+    vertical-align: -0.15em;
+    display: inline-block;
+    filter: drop-shadow(0 0.2rem 0.3rem rgba(0,0,0,0.15));
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    -webkit-user-select: none;
+  }
+
+  /* ---------- Letter "writing" reveal effect ---------- */
+  .letter-stage {
+    position: relative;
+    height: min(40vh, 34vw);
+    width: min(40vh, 34vw);
+    cursor: pointer;
+  }
+  .letter-ghost, .letter-solid {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1;
+    font-size: min(38vh, 32vw);
+  }
+  .letter-ghost { color: rgba(255,255,255,0.22); }
+  .letter-reveal-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    width: 0%;
+  }
+  .letter-solid {
+    position: absolute;
+    inset: 0;
+    width: min(40vh, 34vw);
+    color: white;
+    text-shadow: 0 1rem 0 rgba(0,0,0,0.12), 0 1.6rem 3rem rgba(0,0,0,0.18);
+  }
+  .pen-tip {
+    position: absolute;
+    top: -1.6rem;
+    left: 0;
+    font-size: 3rem;
+    opacity: 0;
+    transform: translateX(-1rem);
+    filter: drop-shadow(0 0.4rem 0.6rem rgba(0,0,0,0.25));
+  }
+
+  .slide-word-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+    cursor: pointer;
+  }
+  .slide-icon { font-size: 4.4rem; }
+  .slide-word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 3.4rem;
+    text-shadow: 0 0.4rem 0 rgba(0,0,0,0.1);
+  }
+
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6.4rem; height: 6.4rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    color: var(--plum);
+    z-index: 50;
+    box-shadow: 0 0.6rem 1.6rem rgba(0,0,0,0.18);
+  }
+  .nav-arrow:active { transform: translateY(-50%) scale(0.88); }
+  #prevArrow { left: 2rem; }
+  #nextArrow { right: 2rem; }
+  .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+  .dots {
+    position: fixed;
+    bottom: 2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.7rem;
+    z-index: 50;
+    max-width: 90vw;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .dot {
+    width: 1.1rem; height: 1.1rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+  .dot.active { background: white; transform: scale(1.3); }
+
+  .repeat-btn {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.9);
+    padding: 0.9rem 2rem;
+    border-radius: 3rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--plum);
+    z-index: 50;
+    box-shadow: 0 0.5rem 1.4rem rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 600px) {
+    .back-btn, .sound-toggle { width: 5rem; height: 5rem; font-size: 2.2rem; top: 1.2rem; }
+    .back-btn { left: 1.2rem; } .sound-toggle { right: 1.2rem; }
+    .repeat-btn { font-size: 1.3rem; padding: 0.7rem 1.6rem; }
+    .nav-arrow { width: 5rem; height: 5rem; font-size: 2.4rem; }
+    #prevArrow { left: 0.8rem; } #nextArrow { right: 0.8rem; }
+    .letter-stage { height: min(34vh, 40vw); width: min(34vh, 40vw); }
+    .letter-ghost, .letter-solid, .letter-solid { font-size: min(32vh, 38vw); }
+    .letter-solid { width: min(34vh, 40vw); }
+    .slide-icon { font-size: 3.2rem; }
+    .slide-word { font-size: 2.4rem; }
+    .dots { bottom: 1.4rem; }
+  }
+
+  @media (max-height: 420px) {
+    .letter-stage { height: 30vh; width: 30vh; }
+    .letter-ghost, .letter-solid { font-size: 28vh; }
+    .letter-solid { width: 30vh; }
+    .slide-word-row { margin-top: 1rem; }
+    .repeat-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn" aria-label="Quay lại bản đồ">←</a>
+<button class="sound-toggle" id="soundToggle" aria-label="Bật hoặc tắt âm thanh">🔊</button>
+<button class="repeat-btn" id="repeatBtn">🔁 Đọc lại</button>
+
+<button class="nav-arrow" id="prevArrow" aria-label="Chữ trước">←</button>
+<button class="nav-arrow" id="nextArrow" aria-label="Chữ sau">→</button>
+
+<div class="deck" id="deck"></div>
+<div class="dots" id="dots"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="assets/js/reward-fx.js"></script>
+<script src="assets/js/sound-manager.js"></script>
+<script>
+  /* ============================================
+     NOTE: đây là bộ 15 chữ khởi đầu (Hướng A).
+     Từ ví dụ nên được người Việt rà lại độ tự nhiên/
+     độ phổ biến trước khi phát hành — đặc biệt chữ
+     "I" (Ỉn) và "E" (Em bé) là 2 chữ khó tìm từ đơn
+     giản, quen thuộc, dễ hình dung cho bé dưới 3 tuổi.
+     ============================================ */
+  const LETTERS = [
+    { ch: 'A', word: 'Áo',   icon: '👕', from: '#FF9A76', to: '#FF6F45' },
+    { ch: 'B', word: 'Bò',   icon: '🐮', from: '#FFBB6B', to: '#FF9A2E' },
+    { ch: 'C', word: 'Cá',   icon: '🐟', from: '#FFE08A', to: '#FFC93C' },
+    { ch: 'D', word: 'Dê',   icon: '🐐', from: '#C6E88C', to: '#9ED14E' },
+    { ch: 'Đ', word: 'Đèn',  icon: '💡', from: '#7DDCA0', to: '#42C171' },
+    { ch: 'E', word: 'Em bé', icon: '👶', from: '#7BDAD4', to: '#3AB8B0' },
+    { ch: 'G', word: 'Gà',   icon: '🐔', from: '#79C7EE', to: '#3E9FDB' },
+    { ch: 'H', word: 'Hoa',  icon: '🌸', from: '#9C9DEE', to: '#6F70DE' },
+    { ch: 'I', word: 'Ỉn',   icon: '🐷', from: '#CB9DEB', to: '#A868DB' },
+    { ch: 'L', word: 'Lá',   icon: '🍃', from: '#F090C0', to: '#E0559C' },
+    { ch: 'M', word: 'Mèo',  icon: '🐱', from: '#FF9A76', to: '#FF6F45' },
+    { ch: 'N', word: 'Nón',  icon: '👒', from: '#FFBB6B', to: '#FF9A2E' },
+    { ch: 'O', word: 'Ong',  icon: '🐝', from: '#FFE08A', to: '#FFC93C' },
+    { ch: 'T', word: 'Táo',  icon: '🍎', from: '#C6E88C', to: '#9ED14E' },
+    { ch: 'V', word: 'Vịt',  icon: '🦆', from: '#7DDCA0', to: '#42C171' },
+  ];
+
+  const deck = document.getElementById('deck');
+  const dotsWrap = document.getElementById('dots');
+  const soundToggle = document.getElementById('soundToggle');
+  const prevArrow = document.getElementById('prevArrow');
+  const nextArrow = document.getElementById('nextArrow');
+  const repeatBtn = document.getElementById('repeatBtn');
+
+  let index = 0;
+  const slides = [];
+
+  soundToggle.addEventListener('click', () => {
+    const nowMuted = !SoundManager.isMuted();
+    SoundManager.setMuted(nowMuted);
+    soundToggle.textContent = nowMuted ? '🔇' : '🔊';
+  });
+
+  LETTERS.forEach((data, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+    slide.style.background = `radial-gradient(circle at 50% 38%, ${data.from}, ${data.to})`;
+    slide.style.opacity = i === 0 ? '1' : '0';
+    slide.style.zIndex = i === 0 ? '2' : '1';
+
+    slide.innerHTML = `
+      <div class="letter-stage" data-role="letter">
+        <div class="letter-ghost">${data.ch}</div>
+        <div class="letter-reveal-wrap"><div class="letter-solid">${data.ch}</div></div>
+        <div class="pen-tip">✏️</div>
+      </div>
+      <div class="slide-word-row" data-role="word">
+        <span class="slide-icon">${data.icon}</span>
+        <span class="slide-word">${data.word}</span>
+      </div>
+    `;
+    deck.appendChild(slide);
+    slides.push(slide);
+
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+
+  twemoji.parse(deck, { folder: 'svg', ext: '.svg' });
+
+  function speakLetter() {
+    SoundManager.speak(`Chữ ${LETTERS[index].ch}`);
+  }
+  function speakFull() {
+    const data = LETTERS[index];
+    SoundManager.speak(`Chữ ${data.ch}. ${data.word}`);
+  }
+
+  function playWriteEffect(slide) {
+    const wrap = slide.querySelector('.letter-reveal-wrap');
+    const pen = slide.querySelector('.pen-tip');
+    const stage = slide.querySelector('.letter-stage');
+    gsap.set(wrap, { width: '0%' });
+    gsap.set(pen, { x: 0, opacity: 1 });
+    const travel = stage.offsetWidth - 40;
+    const tl = gsap.timeline();
+    tl.to(wrap, { width: '100%', duration: 1.1, ease: 'power1.inOut' })
+      .to(pen, { x: travel, duration: 1.1, ease: 'power1.inOut' }, '<')
+      .to(pen, { opacity: 0, duration: 0.3 });
+  }
+
+  function playEntrance(slide) {
+    const wordRow = slide.querySelector('.slide-word-row');
+    gsap.fromTo(wordRow, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, delay: 0.9 });
+    playWriteEffect(slide);
+  }
+
+  function goTo(newIndex) {
+    if (newIndex < 0 || newIndex >= LETTERS.length || newIndex === index) return;
+    const oldSlide = slides[index];
+    const newSlide = slides[newIndex];
+    const dir = newIndex > index ? 1 : -1;
+
+    gsap.set(newSlide, { zIndex: 3, opacity: 1, x: dir * 60 + 'vw' });
+    gsap.to(newSlide, { x: 0, duration: 0.45, ease: 'power2.out' });
+    gsap.to(oldSlide, { x: -dir * 40 + 'vw', opacity: 0, duration: 0.4, ease: 'power2.in',
+      onComplete: () => { oldSlide.style.zIndex = 1; gsap.set(oldSlide, { x: 0 }); } });
+
+    playEntrance(newSlide);
+
+    index = newIndex;
+    dotsWrap.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    prevArrow.classList.toggle('hidden', index === 0);
+    nextArrow.classList.toggle('hidden', index === LETTERS.length - 1);
+
+    speakFull();
+  }
+
+  prevArrow.addEventListener('click', () => goTo(index - 1));
+  nextArrow.addEventListener('click', () => goTo(index + 1));
+  repeatBtn.addEventListener('click', speakFull);
+
+  slides.forEach(slide => {
+    slide.querySelector('[data-role="letter"]').addEventListener('click', () => {
+      speakLetter();
+      celebrate(window.innerWidth / 2, window.innerHeight / 2 - 140);
+      gsap.fromTo(slide.querySelector('.letter-stage'), { scale: 1.06 }, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
+    });
+    slide.querySelector('[data-role="word"]').addEventListener('click', () => {
+      speakFull();
+      const rect = slide.querySelector('[data-role="word"]').getBoundingClientRect();
+      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      gsap.fromTo(slide.querySelector('[data-role="word"]'), { scale: 1.1 }, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
+    });
+  });
+
+  // Swipe gesture support
+  let touchStartX = null;
+  deck.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  deck.addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) goTo(index + 1); else goTo(index - 1);
+    }
+    touchStartX = null;
+  }, { passive: true });
+
+  // Init
+  playEntrance(slides[0]);
+  prevArrow.classList.add('hidden');
+  speakFull();
+</script>
+</body>
+</html>
