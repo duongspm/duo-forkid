@@ -139,6 +139,9 @@
       color: var(--coral-dark);
       text-shadow: 0 0.3rem 0 rgba(255, 255, 255, 0.7);
       letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
     }
 
     .brand p {
@@ -466,6 +469,10 @@
     }
 
     @media (max-width: 760px) {
+      .decor img{
+        width: 6rem;
+        height: 6rem;
+      }
       .sun {
         width: 7rem;
         height: 7rem;
@@ -491,6 +498,12 @@
 
       .brand .display {
         font-size: 2.6rem;
+        flex-direction: column;
+        gap: 0;
+      }
+      .brand .display img{
+        width: 40%;
+        height: auto;
       }
 
       .brand p {
@@ -578,7 +591,10 @@
 
       #decorBalloon {
         font-size: 3rem !important;
-        left: 4% !important;
+        left: 0 !important;
+      }
+      #decorBalloon2 {
+        left: 5% !important;
       }
 
       .mascot-dock {
@@ -794,16 +810,26 @@
     </div>
 
     <div class="brand">
-      <div class="display">🏝️ Bé Vui Học</div>
+      <div class="display"><img src="assets/img/day-night-island.svg" width="140" height="140" alt="image photo"> Bé Vui Học</div>
       <p>Chạm vào một hòn đảo để bắt đầu khám phá!</p>
     </div>
 
-    <div class="decor" id="decorButterfly1" style="top:30%; left:20%; font-size:6.6rem;">🦋</div>
-    <div class="decor" id="decorButterfly2" style="top:14%; left:52%; font-size:9rem;">🦋</div>
-    <div class="decor" id="decorRainbow" style="top:10%; left:16%; font-size:12rem;">🌈</div>
+    <div class="decor" id="decorButterfly1" style="top:30%; left:20%; font-size:6.6rem;">
+      <img src="assets/img/butterfly.svg" width="90" height="90" alt="image photo">
+    </div>
+    <div class="decor" id="decorButterfly2" style="top:20%; left:52%; font-size:9rem;">
+      <img src="assets/img/beee.svg" width="90" height="90" alt="image photo">
+    </div>
+    <div class="decor" id="decorRainbow" style="top:0%; left:10%;">
+      <img src="assets/img/Rainbow.svg" width="300" height="300" alt="image photo">
+    </div>
     <div class="decor" id="decorSparkle1" style="top:34%; left:68%; font-size:8.6rem;">✨</div>
     <div class="decor" id="decorSparkle2" style="top:56%; left:30%; font-size:8.2rem;">✨</div>
-    <div class="decor" id="decorBalloon" style="top:60%; left:8%; font-size: 10.4rem;">🎈</div>
+    <div class="decor" id="decorBalloon" style="top:60%; left:4%; font-size: 10.4rem;">🎈</div>
+    <div class="decor" id="decorBalloon2" style="top:60%; left:8%; font-size: 10.4rem;">
+      <img src="assets/img/Balloon.svg" width="140" height="140" alt="image photo">
+    </div>
+
 
     <svg class="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
       <path id="travelPath" class="path-line" d="M 19 50 Q 28 38 41 34 Q 50 42 63 52 Q 72 38 83 30 Q 88 46 85 64"
@@ -917,7 +943,7 @@
           <h3>Không có "thua"</h3>
           <p>Không có màn hình báo lỗi hay dấu X đỏ. Mọi phản hồi đều nhẹ nhàng khích lệ bé thử lại.</p>
           <figure>
-            <img src="assets/img/CuteDoggie.svg" alt="image photo">
+            <img src="assets/img/AngryDog.svg" alt="image photo">
           </figure>
         </div>
       </div>
@@ -1015,6 +1041,8 @@
     gsap.to('#decorSparkle1', { scale: 1.4, opacity: 0.4, duration: 1.1, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     gsap.to('#decorSparkle2', { scale: 1.4, opacity: 0.4, duration: 1.3, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.3 });
     gsap.to('#decorBalloon', { y: -22, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('#decorBalloon2', { y: -25, duration: 2.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
 
     /* ---------- Islands: entrance + idle float + interactions ---------- */
     const ISLAND_VERSIONS = {
