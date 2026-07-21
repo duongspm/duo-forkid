@@ -349,8 +349,16 @@
       align-items: center;
       gap: 0.4rem;
       z-index: 15;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .scroll-hint:hover {
+      transform: translateX(-50%) translateY(-2px);
     }
 
+    .scroll-hint:active {
+      transform: translateX(-50%) scale(0.96);
+    }
     .scroll-hint span:first-child {
       font-size: 2rem;
     }
@@ -1125,6 +1133,22 @@
           twemoji.parse(bubble, { folder: 'svg', ext: '.svg' });
           gsap.fromTo(bubble, { scale: 1 }, { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1 });
         }
+      });
+    });
+
+    document.querySelectorAll('a[href="#parents"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        gsap.to(link, {
+          scale: 0.96,
+          duration: 0.15,
+          yoyo: true,
+          repeat: 1,
+          ease: 'power2.out'
+        });
+
+        lenis.scrollTo('#parents', { duration: 1.1 });
       });
     });
   </script>

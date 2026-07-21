@@ -123,13 +123,11 @@
 
   .fruit-btn {
     position: absolute;
-    width: 11rem; height: 11rem;
-    font-size: 5.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     filter: grayscale(1) opacity(0.45);
-    transition: filter 0.25s ease;
+    transition: filter 0.25s ease, width 0.2s ease, height 0.2s ease;
   }
   .fruit-btn.counted { filter: none; }
   .fruit-btn:active { transform: scale(0.85); }
@@ -240,13 +238,12 @@
 <script>
   // Each round: how many items, which fruit, and fixed scatter layout (in % of stage)
   const ROUNDS = [
-    { total: 3,  fruit: '🍎', positions: [[20,15],[55,40],[75,10]] },
-    { total: 5,  fruit: '🍌', positions: [[10,45],[30,10],[50,55],[68,20],[85,48]] },
-    { total: 7,  fruit: '🍓', positions: [[8,20],[24,50],[40,8],[55,42],[70,15],[85,55],[46,65]] },
-    { total: 10, fruit: '🍉', positions: [[6,35],[18,10],[30,55],[42,20],[54,45],[66,8],[78,38],[90,60],[12,65],[62,62]] },
-    { total: 14, fruit: '🥝', positions: [[6,15],[18,8],[30,28],[42,12],[54,35],[66,10],[78,30],[90,15],[12,58],[26,48],[40,65],[56,55],[72,62],[88,50]] },
-    { total: 17, fruit: '🍐', positions: [[8,8],[18,18],[28,8],[38,22],[48,10],[58,26],[68,8],[78,20],[88,10],[12,58],[22,48],[34,64],[46,54],[58,62],[70,50],[82,60],[92,46]] },
-    { total: 20, fruit: '🍋', positions: [[6,8],[16,18],[26,8],[36,22],[46,10],[56,26],[66,8],[76,20],[86,10],[96,24],[8,60],[18,48],[30,66],[42,54],[54,64],[66,52],[78,62],[90,50],[24,36],[72,38]] },
+    { total: 3,  fruit: '🍎' },
+    { total: 5,  fruit: '🍌' },
+    { total: 7,  fruit: '🍓' },
+    { total: 10, fruit: '🍉' },
+    { total: 14, fruit: '🍇' },
+    { total: 20, fruit: '🍊' },
   ];
 
   const stage = document.getElementById('stage');
@@ -277,31 +274,68 @@
       d.classList.toggle('active', i === roundIndex);
     });
   }
+  // ---------- Sinh vị trí bằng lưới có "rung" ngẫu nhiên (jittered grid) ----------
+  // Không dùng rejection sampling nữa vì càng nhiều item, số lần thử càng tăng
+  // (chậm dần và có thể vẫn chồng lấn). Lưới đảm bảo KHÔNG CHỒNG LẤN bằng toán học
+  // (mỗi item nằm trong 1 ô lưới riêng), thời gian chạy luôn ổn định dù bao nhiêu item.
+  const BASE_ITEM_SIZE = 90; // px — kích thước lý tưởng khi ít item (khớp 9rem cũ)
+  const MIN_ITEM_SIZE = 48;  // px — sàn tối thiểu để bé vẫn chạm trúng dễ dàng
+  const SPACING_FACTOR = 1.15; // khoảng đệm giữa các ô, tránh item dính sát mép nhau
 
-  function loadRound(i) {
+  function computeItemSize(count, w, h) {
+    const aspect = w / h;
+    const cols = Math.max(1, Math.ceil(Math.sqrt(count * aspect)));
+    const rows = Math.max(1, Math.ceil(count / cols));
+    const cellW = w / cols, cellH = h / rows;
+    const fitSize = Math.min(cellW, cellH) / SPACING_FACTOR;
+    return { itemSize: Math.max(MIN_ITEM_SIZE, Math.min(BASE_ITEM_SIZE, fitSize)), cols, rows };
+  }
+
+  function generatePositions(count, itemSize, cols, rows, w, h) {
+    const cellW = w / cols, cellH = h / rows;
+
+    // Tạo danh sách toàn bộ ô lưới rồi xáo trộn (Fisher–Yates), chỉ lấy `count` ô đầu
+    // -> item rải rác khắp lưới thay vì luôn dồn về góc trên-trái.
+    const cells = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) cells.push({ r, c });
+    }
+    for (let i = cells.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cells[i], cells[j]] = [cells[j], cells[i]];
+    }
+
+    const jitterW = Math.max(0, cellW - itemSize);
+    const jitterH = Math.max(0, cellH - itemSize);
+
+    return cells.slice(0, count).map(({ r, c }) => {
+      const px = c * cellW + itemSize / 2 + Math.random() * jitterW;
+      const py = r * cellH + itemSize / 2 + Math.random() * jitterH;
+      return { left: (px / w) * 100, top: (py / h) * 100 };
+    });
+  }
+function loadRound(i) {
     count = 0;
     countBadge.textContent = '0';
     stage.innerHTML = '';
     const round = ROUNDS[i];
-    // prompt.textContent = `Có mấy quả ${round.fruit === '🍎' ? 'táo' : round.fruit === '🍌' ? 'chuối' : round.fruit === '🍓' ? 'dâu' : 'dưa hấu'} trên đảo nhỉ?`;
-    const FRUIT_NAMES = {
-      '🍎': 'táo',
-      '🍌': 'chuối',
-      '🍓': 'dâu',
-      '🍉': 'dưa hấu',
-      '🥝': 'kiwi xanh',
-      '🍐': 'lê',
-      '🍋': 'chanh vàng',
-    };
+    prompt.textContent = `Có mấy quả ${fruitWord(round.fruit)} trên đảo nhỉ?`;
 
-    prompt.textContent = `Có mấy quả ${FRUIT_NAMES[round.fruit]} trên đảo nhỉ?`;
+    const rect = stage.getBoundingClientRect();
+    const w = Math.max(rect.width, BASE_ITEM_SIZE * 3);
+    const h = Math.max(rect.height, BASE_ITEM_SIZE * 3);
+    const { itemSize, cols, rows } = computeItemSize(round.total, w, h);
+    const positions = generatePositions(round.total, itemSize, cols, rows, w, h);
 
-    round.positions.forEach((pos, idx) => {
+    positions.forEach((pos, idx) => {
       const btn = document.createElement('button');
       btn.className = 'fruit-btn';
       btn.textContent = round.fruit;
-      btn.style.left = pos[0] + '%';
-      btn.style.top = pos[1] + '%';
+      btn.style.left = pos.left + '%';
+      btn.style.top = pos.top + '%';
+      btn.style.width = itemSize + 'px';
+      btn.style.height = itemSize + 'px';
+      btn.style.fontSize = (itemSize * 0.62) + 'px';
       btn.dataset.idx = idx;
       btn.addEventListener('click', () => tapFruit(btn));
       stage.appendChild(btn);
@@ -311,7 +345,6 @@
     twemoji.parse(stage, { folder: 'svg', ext: '.svg' });
     updateDots();
   }
-
   function tapFruit(btn) {
     if (btn.classList.contains('counted')) return;
     btn.classList.add('counted');
@@ -329,10 +362,8 @@
       setTimeout(() => showRoundResult(round), 500);
     }
   }
-
-  const fruitWord = (fruit) =>
-    fruit === '🍎' ? 'táo' : fruit === '🍌' ? 'chuối' : fruit === '🍓' ? 'dâu' : fruit === '🥝' ? 'kiwi xanh' : fruit === '🍐' ? 'lê' : fruit === '🍋' ? 'chanh vàng' : 'dưa hấu';
-
+  const FRUIT_WORDS = { '🍎': 'táo', '🍌': 'chuối', '🍓': 'dâu', '🍉': 'dưa hấu', '🍇': 'nho', '🍊': 'cam' };
+  const fruitWord = (fruit) => FRUIT_WORDS[fruit] || 'quả';
   function showRoundResult(round) {
     const overlay = document.getElementById('roundResultOverlay');
     document.getElementById('roundResultEmoji').textContent = round.fruit;
